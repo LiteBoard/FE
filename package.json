@@ -1,20 +1,51 @@
 {
-  "name": "FE",
+  "name": "LiteBoard",
+  "version": "0.0.1",
   "private": true,
+  "license": "ISC",
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:@LiteBoard": "turbo run dev --filter=LiteBoard...",
+    "dev:@ui": "turbo run storybook --filter=@LiteBoard/ui",
+    "build:@LiteBoard": "turbo run build --filter=LiteBoard...",
+    "build:@ui": "turbo run build --filter=@LiteBoard/ui",
+    "build:@packages": "turbo run build --filter=./packages/*",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prettier": "prettier --write \"{packages,apps}/**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@types/node": "^20.17.17",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
     "prettier": "^3.6.0",
+    "tailwind-scrollbar": "^4.0.1",
+    "tailwindcss": "3.4.15",
+    "tailwindcss-gradients": "^3.0.0",
+    "tailwindcss-interaction-variants": "^5.0.0",
+    "ts-node": "^10.9.2",
     "turbo": "^2.5.4",
     "typescript": "5.8.2"
   },
-  "packageManager": "pnpm@9.0.0",
-  "engines": {
-    "node": ">=18"
-  }
+  "dependencies": {
+    "@tanstack/react-query": "^5.20.1",
+    "@tanstack/react-query-devtools": "^5.20.1",
+    "axios": "^1.8.1",
+    "clsx": "^2.1.1",
+    "next": "14.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwind-merge": "^3.0.2",
+    "tsup": "8.3.6",
+    "zod": "^3.24.2"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
 }

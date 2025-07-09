@@ -1,29 +1,54 @@
 {
-  "name": "@repo/ui",
+  "name": "@LiteBoard/ui",
   "version": "0.0.0",
-  "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
   "exports": {
-    "./*": "./src/*.tsx"
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    }
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit",
-    "build": "tsup src/index.ts --dts --format esm,cjs"
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@chromatic-com/storybook": "^4.0.1",
+    "@storybook/addon-a11y": "^9.0.16",
+    "@storybook/addon-docs": "^9.0.16",
+    "@storybook/addon-onboarding": "^9.0.16",
+    "@storybook/addon-vitest": "^9.0.16",
+    "@storybook/react": "^9.0.16",
+    "@storybook/react-vite": "^9.0.16",
     "@turbo/gen": "^2.5.0",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
-    "eslint": "^9.30.0",
+    "@vitest/browser": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "playwright": "^1.53.2",
+    "storybook": "^9.0.16",
     "tsup": "^8.5.0",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "vite": "^5.4.0",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "@LiteBoard/eslint-config": "workspace:*",
+    "@LiteBoard/fonts": "workspace:*",
+    "@LiteBoard/tailwind-config": "workspace:*",
+    "@LiteBoard/typescript-config": "workspace:*",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.477.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7"
   }
 }

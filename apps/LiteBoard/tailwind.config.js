@@ -1,9 +1,11 @@
 /** @type {import('tailwindcss').Config} */
+import { default as tailwindConfig } from '@LiteBoard/tailwind-config';
+
 export default {
-  presets: [require('tailwind-config')],
+  presets: [tailwindConfig],
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}",
+   `src/**/*.{js,ts,jsx,tsx}`,
+    '../../packages/tailwind-config/*.{js,ts,jsx,tsx}',
+    '../../packages/ui/src/**/*.{js,ts,jsx,tsx}',
   ],
 } 
