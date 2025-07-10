@@ -1,3 +1,4 @@
+import { cn } from '@/lib/util';
 import { cva, VariantProps } from 'class-variance-authority';
 import React from 'react';
 
@@ -114,11 +115,12 @@ export const Button = ({
   radius,
   size,
   children,
+  className,
   ...props
 }: ButtonProps) => (
   <button
     data-button
-    className={buttonVariants({ color, variant, radius, size })}
+    className={cn(buttonVariants({ color, variant, radius, size }), className)}
     {...props}
   >
     {children}
