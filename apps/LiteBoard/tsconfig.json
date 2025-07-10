@@ -1,11 +1,30 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@LiteBoard/typescript-config/nextjs.json",
   "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": "./",
     "plugins": [
       {
         "name": "next"
       }
     ]
+  },
+  "paths": {
+    "@/*": ["./src/*"],
+    "@LiteBoard/tailwind-config": ["../../packages/tailwind-config"],
+    "@LiteBoard/ui": ["../../packages/ui/src"]
   },
   "include": [
     "**/*.ts",
@@ -14,7 +33,5 @@
     "next.config.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
