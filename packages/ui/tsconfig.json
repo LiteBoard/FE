@@ -1,6 +1,10 @@
 {
   "extends": "@LiteBoard/typescript-config/react-library.json",
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "outDir": "dist",
     "rootDir": "../../",
     "declaration": true,
@@ -9,7 +13,8 @@
     "noEmit": false,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@ui": ["../../packages/ui/src/*"]
     }
   },
   "include": ["src", ".storybook/stories"],
