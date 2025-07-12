@@ -1,3 +1,9 @@
+import { Button } from '@LiteBoard/ui';
+
 export default function Home() {
-  return <div>LiteBoard 메인 페이지</div>;
+  return (
+    <div>
+      <Button color="blue">버튼</Button>
+    </div>
+  );
 }

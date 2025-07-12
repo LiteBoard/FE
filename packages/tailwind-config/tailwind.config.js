@@ -32,7 +32,7 @@ const colors = {
   },
   red: {
     50: '#FFEEEE',
-    100: '#FFEEEE',
+    100: '#FFD4D6',
     200: '#FEAFB4',
     300: '#FB8890',
     400: '#F66570',
