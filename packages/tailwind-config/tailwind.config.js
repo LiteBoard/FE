@@ -145,6 +145,7 @@ module.exports = {
         md: '0 4px 8px 0 rgb(0 0 0 / 0.08)',
         lg: '0 4px 16px 0 rgb(137 137 142 / 0.16)',
         xl: '0 4px 20px 0 rgb(0 0 0 / 0.2)',
+        modal: '0 10px 20px 0 rgb(0 0 0 / 0.05)',
       },
       animation: {
         'fade-in': 'fade-in 0.2s ease-out',
