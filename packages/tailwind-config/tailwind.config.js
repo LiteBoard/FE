@@ -59,6 +59,7 @@ const colors = {
     blue: '#E0EDFF',
     skyBlue: '#DAF3FF',
     purple: '#E5DCFF',
+    coolGray: '#E7EBF5',
   },
 };
 

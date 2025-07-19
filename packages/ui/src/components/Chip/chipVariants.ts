@@ -13,7 +13,7 @@ export const chipVariants = cva(
         green: '',
         red: '',
         black: '',
-        gray: '',
+        coolGray: '',
       },
       size: {
         lg: 'h-8 text-T2',
@@ -31,6 +31,7 @@ export const chipVariants = cva(
       { variant: 'filled', color: 'green', class: 'bg-green-500 text-white' },
       { variant: 'filled', color: 'red', class: 'bg-red-500 text-white' },
       { variant: 'filled', color: 'black', class: 'bg-neutral-800 text-white' },
+      { variant: 'filled', color: 'coolGray', class: 'bg-coolGray-100 text-neutral-700' },
 
       // Weak with hover
       {
@@ -53,10 +54,15 @@ export const chipVariants = cva(
         color: 'black',
         class: 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200',
       },
+      {
+        variant: 'weak',
+        color: 'coolGray',
+        class: 'bg-coolGray-50 text-neutral-600 hover:bg-coolGray-100',
+      },
     ],
     defaultVariants: {
       variant: 'filled',
-      color: 'gray',
+      color: 'blue',
       size: 'md',
       radius: 'max', // 기본은 rounded-full
     },
