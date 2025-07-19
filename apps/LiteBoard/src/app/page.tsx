@@ -1,12 +1,10 @@
-import { Button, Chip } from '@LiteBoard/ui';
+import { Button, Chip, InputLabel } from '@LiteBoard/ui';
 
 export default function Home() {
   return (
-    <div>
+    <div className='flex flex-col items-center justify-center h-screen'>
       {/* <Button color="blue">버튼</Button> */}
-      <Chip color="blue" size="md" radius="md" variant="filled">
-        라벨
-      </Chip>
+      <InputLabel label="이름" required />
     </div>
   );
 }
