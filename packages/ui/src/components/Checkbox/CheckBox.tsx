@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Check } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -19,14 +19,23 @@ export const Checkbox = ({
 }: CheckboxProps) => {
   const [checked, setChecked] = useState(defaultChecked);
   const [hovered, setHovered] = useState(false);
+  const [pendingChange, setPendingChange] = useState<boolean | null>(null);
 
-  const toggle = () => {
+
+  useEffect(() => {
+    if (pendingChange !== null) {
+      onChange?.(pendingChange);
+      setPendingChange(null);
+    }
+  }, [pendingChange, onChange]);
+
+  const toggle = useCallback(() => {
     setChecked((prev) => {
       const next = !prev;
-      onChange?.(next);
+      setPendingChange(next);
       return next;
     });
-  };
+  }, []);
 
   const checkboxSize = size === 'md' ? 'w-5 h-5' : 'w-4 h-4';
   const iconSize = size === 'md' ? 14 : 12;
@@ -52,7 +61,7 @@ export const Checkbox = ({
   return (
     <button
       type="button"
-      className="flex items-center cursor-pointer"
+      className="flex items-center cursor-pointer w-full"
       onClick={toggle}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -60,7 +69,7 @@ export const Checkbox = ({
       <div className={boxStyle}>
         {checked && <Check size={iconSize} color="white" />}
       </div>
-      <span className={labelColor}>{label}</span>
+      <span className={`${labelColor} truncate`}>{label}</span>
     </button>
   );
 };

@@ -7,7 +7,7 @@ interface ProfileProps {
 }
 
 const profileVariants = cva(
-  'flex items-center justify-center rounded-full font-medium text-gray-800',
+  'flex items-center justify-center rounded-full font-medium text-gray-800 border-2 border-white',
   {
     variants: {
       size: {
