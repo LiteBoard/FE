@@ -13,7 +13,7 @@ interface Todo {
 
 type Status = 'latest' | 'notLatest' | 'delayed' | 'finished';
 
-interface TodoCardProps {
+export interface TodoCardProps {
   status: Status;
   title: string;
   todos: Todo[];
@@ -21,12 +21,12 @@ interface TodoCardProps {
 
 const statusChip = {
   latest: { color: 'blue', label: '오늘 마감' },
-  notLatest: { color: 'gray', label: '1일 남음' },
+  notLatest: { color: 'coolGray', label: '1일 남음' },
   delayed: { color: 'red', label: '1일 지연됨' },
   finished: { color: 'blue', label: '완료됨' },
 } as const;
 
-type ChipColor = 'blue' | 'gray' | 'red' | 'black' | 'green';
+type ChipColor = 'blue' | 'coolGray' | 'red' | 'black' | 'green';
 
 export const TodoCard: React.FC<TodoCardProps> = ({
   status,
