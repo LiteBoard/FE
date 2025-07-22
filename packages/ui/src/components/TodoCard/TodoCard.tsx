@@ -89,7 +89,7 @@ export const TodoCard: React.FC<TodoCardProps> = ({
               <Checkbox
                 size="md"
                 label={todo.text}
-                defaultChecked={todo.checked}
+                checked={todo.checked}
                 onChange={(checked) => handleTodoChange(todo.id, checked)}
               />
             </div>

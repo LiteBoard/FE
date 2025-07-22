@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Check } from 'lucide-react';
 import clsx from 'clsx';
 
 interface CheckboxProps {
   size: 'md' | 'sm';
   label: string;
+  checked: boolean;
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
 }
@@ -14,28 +15,21 @@ interface CheckboxProps {
 export const Checkbox = ({
   size,
   label,
+  checked: controlledChecked,
   defaultChecked = false,
   onChange,
 }: CheckboxProps) => {
-  const [checked, setChecked] = useState(defaultChecked);
+  const isControlled = controlledChecked !== undefined;
+  const [uncontrolledChecked, setUncontrolledChecked] = useState(defaultChecked);
   const [hovered, setHovered] = useState(false);
-  const [pendingChange, setPendingChange] = useState<boolean | null>(null);
 
-
-  useEffect(() => {
-    if (pendingChange !== null) {
-      onChange?.(pendingChange);
-      setPendingChange(null);
-    }
-  }, [pendingChange, onChange]);
+  const checked = isControlled ? controlledChecked : uncontrolledChecked;
 
   const toggle = useCallback(() => {
-    setChecked((prev) => {
-      const next = !prev;
-      setPendingChange(next);
-      return next;
-    });
-  }, []);
+    const next = !checked;
+    if (!isControlled) setUncontrolledChecked(next);
+    onChange?.(next);
+  }, [checked, isControlled, onChange]);
 
   const checkboxSize = size === 'md' ? 'w-5 h-5' : 'w-4 h-4';
   const iconSize = size === 'md' ? 14 : 12;
