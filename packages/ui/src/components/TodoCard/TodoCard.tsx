@@ -28,11 +28,11 @@ const statusChip = {
 
 type ChipColor = 'blue' | 'coolGray' | 'red' | 'black' | 'green';
 
-export const TodoCard: React.FC<TodoCardProps> = ({
+export const TodoCard = ({
   status,
   title,
   todos: initialTodos,
-}) => {
+}: TodoCardProps) => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [isClient, setIsClient] = useState(false);
 
