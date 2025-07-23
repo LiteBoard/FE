@@ -1,5 +1,8 @@
 export * from './Button';
+export * from './Chip';
 export * from './Icon';
+export * from './Modal';
+export * from './Profile';
 export * from './Progress';
 export * from './Chip';
 export * from './InputLabel';
@@ -7,6 +10,6 @@ export * from './Switch';
 export * from './Profile';
 export * from './Checkbox';
 export * from './TodoCard';
+export * from './SegmentTab';
 export * from './Skeleton';
-export * from './Modal';
 export * from './TextField';

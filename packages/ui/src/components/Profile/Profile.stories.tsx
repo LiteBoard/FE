@@ -66,11 +66,19 @@ export const OverlappingGroup: Story = {
   render: () => (
     <div className="flex justify-center items-center min-h-screen">
       <div className="flex">
-        <div className="z-10"><Profile name="K" variant="skyBlue" /></div>
-        <div className="-ml-2 z-20"><Profile name="K" variant="blue" /></div>
-        <div className="-ml-2 z-30"><Profile name="K" variant="purple" /></div>
-        <div className="-ml-2 z-40"><Profile name="K" variant="corral" /></div>
-        <div className="-ml-2 z-50">
+        <div className="z-10">
+          <Profile name="K" variant="skyBlue" />
+        </div>
+        <div className="z-20 -ml-2">
+          <Profile name="K" variant="blue" />
+        </div>
+        <div className="z-30 -ml-2">
+          <Profile name="K" variant="purple" />
+        </div>
+        <div className="z-40 -ml-2">
+          <Profile name="K" variant="corral" />
+        </div>
+        <div className="z-50 -ml-2">
           <Profile name="00" variant="blue" />
         </div>
       </div>
