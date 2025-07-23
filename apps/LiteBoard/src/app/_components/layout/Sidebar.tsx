@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   sidebarPanelMotion,
   projectItemMotion,
-} from './animation/sidebar.motion';
+} from '../animation/sidebar.motion';
 
 /**
  * 테스트 용 목록

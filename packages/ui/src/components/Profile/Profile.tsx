@@ -36,9 +36,5 @@ export const Profile = ({
 }: ProfileProps) => {
   const initial = name.trim().charAt(0).toUpperCase();
 
-  return (
-    <div className={profileVariants({ size, variant })}>
-      {initial}
-    </div>
-  );
+  return <div className={profileVariants({ size, variant })}>{initial}</div>;
 };
