@@ -1,50 +1,83 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { loginWithGoogle, getAccessTokenWithRefreshToken } from "@LiteBoard/api/auth";
+import { setAccessToken } from "@LiteBoard/api";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const code = searchParams.get("code");
+  const state = searchParams.get("state");
 
   useEffect(() => {
-    const code = searchParams.get("code");
-    const state = searchParams.get("state");
+    const authenticate = async () => {
+      try {
+        if (!code) {
+          setError("구글 인증 코드가 없습니다.");
+          setIsLoading(false);
+          return;
+        }
 
-    if (code) {
-      // 실제 서비스에서는 try-catch, 로딩/에러 처리 등 추가 필요
-      fetch("/api/auth/google/callback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, state }),
-      })
-        .then(async (res) => {
-          if (res.ok) {
-            // 로그인 성공 시 메인 페이지 등으로 이동
-            router.replace("/");
-          } else {
-            // 에러 처리
-            alert("로그인에 실패했습니다.");
-            router.replace("/login");
-          }
-        })
-        .catch(() => {
-          alert("로그인 중 오류가 발생했습니다.");
-          router.replace("/login");
-        });
-    } else {
-      // code가 없으면 에러 처리
-      alert("구글 인증 코드가 없습니다.");
-      router.replace("/login");
-    }
-  }, [searchParams, router]);
+        // 1. 로그인 및 Refresh-Token 쿠키 저장
+        await loginWithGoogle(code, state ?? undefined);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-4">구글 로그인 처리 중...</h2>
-        <p>잠시만 기다려주세요.</p>
+        // 2. Refresh-Token 쿠키로 Access Token 발급 요청
+        const response = await getAccessTokenWithRefreshToken();
+        const authHeader = response.headers["authorization"];
+
+        if (authHeader?.startsWith("Bearer ")) {
+          const token = authHeader.replace("Bearer ", "");
+          setAccessToken(token);
+          router.replace("/");
+        } else {
+          setError("Access Token 발급에 실패했습니다.");
+        }
+      } catch (err: any) {
+        console.error("Google login error:", err);
+        setError(
+          `로그인에 실패했습니다. ${err.response?.data?.message || err.message || err}`
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    authenticate();
+  }, [code, state, router]);
+
+  // 로딩 UI
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">구글 로그인 처리 중...</h2>
+          <p>잠시만 기다려주세요.</p>
+        </div>
       </div>
-    </div>
-  );
-} 
+    );
+  }
+
+  // 에러 UI
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4 text-red-600">로그인 실패</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => router.replace("/login")}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            로그인 페이지로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
