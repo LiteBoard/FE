@@ -1,4 +1,4 @@
-import DashboardSummary from "node_modules/@LiteBoard/ui/src/components/DashboardSummary/DashboardSummary";
+import { DashboardSummary } from "@LiteBoard/ui";
 
 export default function MyWorkPage() {
   return (<div className="relative">
