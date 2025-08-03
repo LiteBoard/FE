@@ -22,7 +22,7 @@ if (typeof window !== "undefined") {
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true, // Refresh Token이 쿠키로 자동 포함되도록 설정
+  withCredentials: true,
 });
 
 // 요청 인터셉터: AccessToken 붙이기
@@ -73,8 +73,6 @@ api.interceptors.response.use(
         }
       } catch (e) {
         clearAccessToken();
-        // window.location.href = "/login"; // 자동 리다이렉트 제거
-        // 에러를 그대로 전달하여 컴포넌트에서 처리하도록 함
       }
     }
 
@@ -82,4 +80,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default api; 

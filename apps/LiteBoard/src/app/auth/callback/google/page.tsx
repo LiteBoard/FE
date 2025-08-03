@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAccessTokenWithRefreshToken } from "@LiteBoard/api/auth";
-import { setAccessToken } from "@LiteBoard/api";
+import { getAccessTokenWithRefreshToken, setAccessToken } from "@/lib/api";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
