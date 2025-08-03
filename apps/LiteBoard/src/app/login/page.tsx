@@ -4,26 +4,19 @@ import { Button, GoogleIcon } from "@LiteBoard/ui";
 
 export default function LoginPage() {
   const handleGoogleLogin = () => {
-    const state = crypto.randomUUID();
-    sessionStorage.setItem("oauth_state", state);
-
-    const googleAuthUrl =
-      "https://accounts.google.com/o/oauth2/v2/auth?" +
-      new URLSearchParams({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-        redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!,
-        response_type: "code",
-        scope: "openid email profile",
-        state,
-        prompt: "consent",
-      });
-
-    window.location.href = googleAuthUrl;
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`;
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center relative bg-white">
-      <div className="absolute inset-0 z-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(177, 248, 250, 0.5) 0%, rgba(49, 130, 246, 0.03) 70%, rgba(255,255,255,0) 100%)", opacity: 0.4 }} />
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(177, 248, 250, 0.5) 0%, rgba(49, 130, 246, 0.03) 70%, rgba(255,255,255,0) 100%)",
+          opacity: 0.4,
+        }}
+      />
       <div className="flex flex-col gap-[44px] absolute top-[180px]">
         <div className="flex flex-col items-center gap-[16px]">
           <span className="text-text-H2 text-neutral-900">
@@ -45,4 +38,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

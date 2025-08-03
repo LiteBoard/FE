@@ -2,5 +2,9 @@
   "name": "@LiteBoard/api",
   "version": "1.0.0",
   "main": "axios.ts",
-  "types": "axios.ts"
-} 
+  "types": "axios.ts",
+  "dependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "js-cookie": "^3.0.5"
+  }
+}

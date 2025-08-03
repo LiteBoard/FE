@@ -1,55 +1,59 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { loginWithGoogle, getAccessTokenWithRefreshToken } from "@LiteBoard/api/auth";
+import { useRouter } from "next/navigation";
+import { getAccessTokenWithRefreshToken } from "@LiteBoard/api/auth";
 import { setAccessToken } from "@LiteBoard/api";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const code = searchParams.get("code");
-  const state = searchParams.get("state");
 
   useEffect(() => {
     const authenticate = async () => {
       try {
-        if (!code) {
-          setError("구글 인증 코드가 없습니다.");
-          setIsLoading(false);
-          return;
-        }
-
-        // 1. 로그인 및 Refresh-Token 쿠키 저장
-        await loginWithGoogle(code, state ?? undefined);
-
-        // 2. Refresh-Token 쿠키로 Access Token 발급 요청
+        // 서버가 쿠키로 Refresh Token을 설정했으므로
+        // 별도 파라미터 없이 Access Token 요청
         const response = await getAccessTokenWithRefreshToken();
-        const authHeader = response.headers["authorization"];
+        
+        // HTTP 상태 코드 200 확인
+        if (response.status === 200) {
+          const authHeader = response.headers["authorization"];
 
-        if (authHeader?.startsWith("Bearer ")) {
-          const token = authHeader.replace("Bearer ", "");
-          setAccessToken(token);
-          router.replace("/");
+          if (authHeader?.startsWith("Bearer ")) {
+            const token = authHeader.replace("Bearer ", "");
+            setAccessToken(token);
+            router.replace("/mywork");
+          } else {
+            setError("Access Token 발급에 실패했습니다.");
+          }
         } else {
-          setError("Access Token 발급에 실패했습니다.");
+          setError(`서버 응답 오류: ${response.status}`);
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error("Google login error:", err);
-        setError(
-          `로그인에 실패했습니다. ${err.response?.data?.message || err.message || err}`
-        );
+
+        // Axios 에러 타입 체크
+        if (err && typeof err === 'object' && 'response' in err) {
+          const axiosError = err as { response?: { status?: number; data?: { message?: string } } };
+          if (axiosError.response?.status === 401) {
+            setError("로그인이 완료되지 않았습니다. 서버에서 Refresh Token을 설정하지 못했습니다.");
+          } else {
+            setError(`로그인에 실패했습니다. ${axiosError.response?.data?.message ?? '알 수 없는 오류'}`);
+          }
+        } else {
+          const errorMessage = err instanceof Error ? err.message : String(err);
+          setError(`로그인에 실패했습니다. ${errorMessage}`);
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     authenticate();
-  }, [code, state, router]);
+  }, [router]);
 
-  // 로딩 UI
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -61,7 +65,6 @@ export default function GoogleCallbackPage() {
     );
   }
 
-  // 에러 UI
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
