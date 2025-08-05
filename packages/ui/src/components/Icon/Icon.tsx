@@ -592,3 +592,40 @@ export const UserIcon = ({
     </g>
   </svg>
 );
+
+export const GoogleIcon = ({
+  size = 24,
+  width,
+  height,
+  className,
+  ...props
+}: IconProps) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 48 48"
+      width={width ?? size}
+      height={height ?? size}
+      className={cn(className)}
+      {...props}
+    >
+      <path
+        fill="#EA4335"
+        d="M24 9.5c3.15 0 5.73 1.08 7.62 2.84l5.66-5.66C33.21 3.16 28.97 1 24 1 14.86 1 7.44 6.86 4.69 14.36l6.95 5.4C13.05 13.04 18.08 9.5 24 9.5z"
+      />
+      <path
+        fill="#4285F4"
+        d="M46.49 24.5c0-1.64-.15-2.82-.48-4.05H24v7.7h12.85c-.26 1.62-1.71 4.05-4.93 5.67l7.61 5.9c4.42-4.1 6.96-10.15 6.96-15.22z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M11.64 28.03a14.88 14.88 0 0 1 0-8.05l-6.95-5.4a23.99 23.99 0 0 0 0 18.85l6.95-5.4z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 47c6.48 0 11.91-2.13 15.88-5.82l-7.61-5.9c-2.1 1.39-4.94 2.21-8.27 2.21-5.92 0-10.95-3.54-12.35-8.49l-6.95 5.4C7.44 41.14 14.86 47 24 47z"
+      />
+      <path fill="none" d="M0 0h48v48H0z" />
+    </svg>
+  );
+};

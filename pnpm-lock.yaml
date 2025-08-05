@@ -99,6 +99,9 @@ importers:
       '@LiteBoard/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      axios:
+        specifier: ^1.8.1
+        version: 1.10.0
       framer-motion:
         specifier: ^12.23.6
         version: 12.23.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -127,6 +130,8 @@ importers:
       typescript:
         specifier: 5.8.2
         version: 5.8.2
+
+  packages/api: {}
 
   packages/eslint-config:
     devDependencies:

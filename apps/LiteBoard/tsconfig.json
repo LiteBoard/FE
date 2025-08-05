@@ -18,7 +18,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@LiteBoard/tailwind-config": ["../../packages/tailwind-config"],
-      "@LiteBoard/ui": ["../../packages/ui/src"]
+      "@LiteBoard/ui": ["../../packages/ui/src"],
+
     },
     "plugins": [
       {
