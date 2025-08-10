@@ -9,7 +9,7 @@ export interface ApiResponse<T> {
 // 사용자 정보 타입
 export interface Member {
   id: number;
-  name: string;
+  nickname: string;
   profileUrl: string;
 }
 

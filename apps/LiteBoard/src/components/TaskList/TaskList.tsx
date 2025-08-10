@@ -2,7 +2,6 @@
 
 import { TodoCard } from "@LiteBoard/ui";
 import { useTasks } from "@/hooks/useTasks";
-import { Task } from "@/types/api";
 
 // 태스크 상태 매핑
 const getTaskStatus = (status: string, daysLeft: number): 'latest' | 'notLatest' | 'delayed' | 'finished' => {
@@ -64,7 +63,7 @@ export function TaskList() {
           id: todo.id.toString(),
           text: todo.description,
           checked: todo.done,
-          assignee: todo.member.name,
+          assignee: todo.member.nickname,
           requested: todo.isRequired,
         }));
 

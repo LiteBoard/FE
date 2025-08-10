@@ -50,7 +50,7 @@ export default function MyWorkPage() {
         total={data.totalTodoCount}
         completed={data.completedTodoCount}
         pending={data.pendingTodoCount}
-        userName={data.myInfo.name}
+        userName={data.myInfo.nickname}
       />
       <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
       
