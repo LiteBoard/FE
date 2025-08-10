@@ -1,11 +1,11 @@
 "use client";
 
 import { DashboardSummary } from "@LiteBoard/ui";
-import { useTasksQuery } from "@/hooks/useTasks";
+import { useTasks } from "@/hooks/useTasks";
 import { TaskList } from "@/components/TaskList";
 
 export default function MyWorkPage() {
-  const { data, isLoading, error } = useTasksQuery();
+  const { data, isLoading, error } = useTasks();
 
   if (isLoading) {
     return (

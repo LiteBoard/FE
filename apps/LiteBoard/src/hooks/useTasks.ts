@@ -14,7 +14,7 @@ const fetchTasks = async (): Promise<TasksResponse> => {
 };
 
 // 업무조회 React Query 훅
-export const useTasksQuery = () => {
+export const useTasks = () => {
   return useQuery({
     queryKey: ['tasks'],
     queryFn: fetchTasks,

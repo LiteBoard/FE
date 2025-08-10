@@ -1,22 +1,8 @@
 "use client";
 
 import { TodoCard } from "@LiteBoard/ui";
-import { useTasksQuery } from "@/hooks/useTasks";
+import { useTasks } from "@/hooks/useTasks";
 import { Task } from "@/types/api";
-
-// 태스크 상태에 따른 라벨 매핑
-const getStatusLabel = (status: string, daysLeft: number) => {
-  switch (status.toLowerCase()) {
-    case 'completed':
-      return '완료됨';
-    case 'overdue':
-      return `${Math.abs(daysLeft)}일 지연됨`;
-    case 'today':
-      return '오늘 마감';
-    default:
-      return daysLeft > 0 ? `${daysLeft}일 남음` : '오늘 마감';
-  }
-};
 
 // 태스크 상태 매핑
 const getTaskStatus = (status: string, daysLeft: number): 'latest' | 'notLatest' | 'delayed' | 'finished' => {
@@ -36,7 +22,7 @@ const getTaskStatus = (status: string, daysLeft: number): 'latest' | 'notLatest'
 
 // 태스크 목록 컴포넌트
 export function TaskList() {
-  const { data, isLoading, error } = useTasksQuery();
+  const { data, isLoading, error } = useTasks();
 
   if (isLoading) {
     return (
