@@ -1,6 +1,6 @@
 "use client";
 
-import { DashboardSummary } from "@LiteBoard/ui";
+import { DashboardSummary, TodoCard } from "@LiteBoard/ui";
 import { useTasks } from "@/hooks/useTasks";
 import { TaskList } from "@/components/TaskList";
 
@@ -54,8 +54,40 @@ export default function MyWorkPage() {
       />
       <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
       
+      {/* 임시 TodoCard 테스트 */}
+      <div className="mt-16 mb-8">
+        <h3 className="text-lg font-bold mb-4">TodoCard 테스트</h3>
+        <TodoCard
+          status="latest"
+          title="프론트엔드 개발 작업"
+          todos={[
+            {
+              id: "1",
+              text: "로그인 페이지 구현",
+              checked: true,
+              assignee: "홍길동",
+              requested: false,
+            },
+            {
+              id: "2", 
+              text: "대시보드 API 연동",
+              checked: false,
+              assignee: "김철수",
+              requested: true,
+            },
+            {
+              id: "3",
+              text: "TodoCard 컴포넌트 테스트",
+              checked: false,
+              assignee: "이영희",
+              requested: false,
+            },
+          ]}
+        />
+      </div>
+
       {/* 태스크 목록 */}
-      <div className="mt-16">
+      <div className="mt-8">
         <TaskList />
       </div>
     </div>

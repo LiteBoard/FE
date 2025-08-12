@@ -176,6 +176,31 @@ export const PlusIcon = ({
   </svg>
 );
 
+export const PlusLargeIcon = ({
+  width = 20,
+  height = 20,
+  className,
+  ...props
+}: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox="0 0 20 20"
+    fill="none"
+    className={cn('text-neutral-600', className)}
+    {...props}
+  >
+    <path
+      d="M10 5V15M15 10H5"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const XIcon = ({
   width = 16,
   height = 16,
