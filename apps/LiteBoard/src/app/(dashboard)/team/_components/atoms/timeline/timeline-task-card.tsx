@@ -40,7 +40,7 @@ const TimelineTaskCard = ({
         <div
           key={index}
           style={{ left: `${34 + index * 40}px` }}
-          className="absolute top-0 right-0 bottom-0 border-l border-dashed border-neutral-500"
+          className="absolute top-0 right-0 bottom-0 border-l-[0.7px] border-dashed border-neutral-500"
         />
       ))}
     </div>
