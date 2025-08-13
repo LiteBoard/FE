@@ -1,13 +1,13 @@
-import { useTruncateText } from '@/utils/useTruncateText';
+import { truncateText } from '@/utils/truncateText';
 import { ProjectTabs } from './ProjectTabs';
 import { ProjectShare } from './ProjectShare';
 
 export const ProjectHeader = () => {
   return (
-    <div className="flex justify-between items-center w-full">
+    <div className="flex justify-between items-center w-full h-[56px]">
       <div className="flex gap-7 justify-center items-end">
         <p className="text-text-H1 text-neutral-900">
-          {useTruncateText('이거이십글자에맞춘거야어떤가용가리???', 20)}
+          {truncateText('타이틀', 20)}
         </p>
         <ProjectTabs />
       </div>
