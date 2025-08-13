@@ -10,10 +10,12 @@ const LayoutDashboard = ({ children }: { children: React.ReactNode }) => {
       <nav className="fixed bottom-0 z-10 col-start-1 row-span-2 row-start-1 h-[calc(100vh-56px)] bg-neutral-50 border-r border-neutral-100 w-[92px] px-4 py-6">
         <Sidebar />
       </nav>
-      <div className="flex col-start-2 row-start-2 justify-center bg-neutral-white pt-[88px] pl-11">
-        <main className="pr-7 w-full h-full">
-          <ProjectHeader />
-          <div className="mt-12">{children}</div>
+      <div className="flex col-start-2 row-start-2 bg-neutral-white pt-[88px] overflow-hidden">
+        <main className="flex flex-col w-full h-full">
+          <div className="pr-7 pb-12 pl-11">
+            <ProjectHeader />
+          </div>
+          <div className="flex-1 h-full">{children}</div>
         </main>
       </div>
     </div>
