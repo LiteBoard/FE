@@ -1,3 +1,5 @@
+'use client';
+
 import { truncateText } from '@/utils/truncateText';
 import { ProjectTabs } from './ProjectTabs';
 import { ProjectShare } from './ProjectShare';

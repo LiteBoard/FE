@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/utils/cn';
 import { useState } from 'react';
 import { FolderIcon } from '@LiteBoard/ui';

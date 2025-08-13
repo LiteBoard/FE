@@ -1,5 +1,3 @@
-'use client';
-
 import { Header, Sidebar } from '@/app/_components/layout';
 import { ProjectHeader } from '@/app/_components/project-header';
 
