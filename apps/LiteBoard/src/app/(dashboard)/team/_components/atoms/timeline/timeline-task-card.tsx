@@ -29,12 +29,20 @@ const TimelineTaskCard = ({
         top: `${taskIndex * (38 + 2) + 46}px`,
       }}
     >
-      <div className="flex justify-between items-center w-full">
+      <div className="flex relative justify-between items-center w-full">
         <span className="text-text-T3 text-neutral-800">{task.name}</span>
         <span className="text-text-caption text-neutral-900">
           {task.progress}
         </span>
       </div>
+
+      {Array.from({ length: width / 40 - 1 }).map((_, index) => (
+        <div
+          key={index}
+          style={{ left: `${34 + index * 40}px` }}
+          className="absolute top-0 right-0 bottom-0 border-l border-dashed border-neutral-500"
+        />
+      ))}
     </div>
   );
 };
