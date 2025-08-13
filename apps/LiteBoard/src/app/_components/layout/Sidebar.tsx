@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/utils/cn';
 import { useState } from 'react';
 import { FolderIcon } from '@LiteBoard/ui';
@@ -28,7 +30,7 @@ export const Sidebar = () => {
   return (
     <aside className="flex flex-col justify-start items-center h-full">
       <button
-        className="flex flex-col gap-2 justify-center items-center text-text-T3 text-neutral-700"
+        className="flex flex-col gap-2 justify-center items-center select-none text-text-T3 text-neutral-700"
         onClick={handleToggle}
       >
         <div

@@ -12,7 +12,7 @@ export const ProjectTabs = () => {
         <Link
           key={index}
           href={`/${menu}`}
-          className={`text-text-H3 hover:text-neutral-600 transition-colors duration-200 cursor-pointer ${
+          className={`text-text-H3 hover:text-neutral-600 transition-colors duration-200 cursor-pointer select-none ${
             pathname === `/${menu}` ? 'text-neutral-800' : 'text-neutral-300'
           }`}
         >

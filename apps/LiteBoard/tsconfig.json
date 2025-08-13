@@ -17,6 +17,12 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
+      "@components/*": ["./src/app/_components/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@providers/*": ["./src/providers/*"],
+      "@utils/*": ["./src/utils/*"],
       "@LiteBoard/tailwind-config": ["../../packages/tailwind-config"],
       "@LiteBoard/ui": ["../../packages/ui/src"],
 
