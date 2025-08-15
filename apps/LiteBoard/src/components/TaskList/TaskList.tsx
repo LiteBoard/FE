@@ -1,6 +1,6 @@
 "use client";
 
-import { TodoCard } from "@LiteBoard/ui";
+import { TodoCard, HelpIcon } from "@LiteBoard/ui";
 import { useTasks } from "@/hooks/useTasks";
 import { useProjectContext } from "@/providers/ProjectProvider";
 
@@ -48,9 +48,10 @@ export function TaskList() {
 
   if (!data || !data.tasks || data.tasks.length === 0) {
     return (
-      <div className="text-gray-500 p-8 text-center">
-        <h3 className="text-lg font-medium mb-2">진행 중인 태스크가 없습니다</h3>
-        <p>새로운 태스크를 생성해보세요!</p>
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+        <HelpIcon className="text-neutral-300 mb-4" width={40} height={40} />
+        <p className="text-neutral-500 text-lg mb-2">아직 생성된 내 업무가 없습니다.</p>
+        <p className="text-neutral-400 text-sm">새로운 업무 일정을 생성하고 관리에 도전하세요!</p>
       </div>
     );
   }
