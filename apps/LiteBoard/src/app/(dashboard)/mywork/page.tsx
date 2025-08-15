@@ -2,12 +2,17 @@
 
 import { DashboardSummary, TodoCard } from "@LiteBoard/ui";
 import { useTasks } from "@/hooks/useTasks";
+import { useProjectContext } from "@/providers/ProjectProvider";
 import { TaskList } from "@/components/TaskList";
 
 export default function MyWorkPage() {
-  const { data, isLoading, error } = useTasks();
+  const { selectedProjectId } = useProjectContext();
+  const { data, isLoading, error } = useTasks(selectedProjectId);
 
-  if (isLoading) {
+
+
+  // 프로젝트가 선택되지 않았거나 로딩 중일 때
+  if (!selectedProjectId || isLoading) {
     return (
       <div className="relative">
         <div className="animate-pulse">
@@ -46,6 +51,11 @@ export default function MyWorkPage() {
 
   return (
     <div className="relative">
+      {/* 프로젝트 이름 표시 */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-neutral-900">{data.projectName}</h1>
+      </div>
+      
       <DashboardSummary 
         total={data.totalTodoCount}
         completed={data.completedTodoCount}

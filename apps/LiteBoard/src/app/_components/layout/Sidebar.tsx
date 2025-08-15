@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/utils/cn';
 import { useState, useCallback } from 'react';
 import { FolderIcon, PlusIcon } from '@LiteBoard/ui';
@@ -6,18 +8,18 @@ import {
   sidebarPanelMotion,
   projectItemMotion,
 } from '../animation/sidebar.motion';
-
-/**
- * 테스트 용 목록
- */
-const initialProjectList = ['프로젝트명', '프로젝트명이길면이렇게...'];
+import { useProjects, useCreateProject } from '@/hooks/useProjects';
+import { useProjectContext } from '@/providers/ProjectProvider';
 
 export const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const [showContent, setShowContent] = useState(false);
-  const [projectList, setProjectList] = useState(initialProjectList);
   const [isAddingProject, setIsAddingProject] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
+  const { selectedProjectId, setSelectedProjectId } = useProjectContext();
+
+  const { data: projects, isLoading, error } = useProjects();
+  const createProjectMutation = useCreateProject();
 
   const handleToggle = () => {
     if (open) {
@@ -32,17 +34,32 @@ export const Sidebar = () => {
     setIsAddingProject(true);
   }, []);
 
-  const handleSaveProject = useCallback(() => {
+  const handleSaveProject = useCallback(async () => {
     if (!newProjectName.trim()) {
       setIsAddingProject(false);
       setNewProjectName('');
       return;
     }
 
-    setProjectList(prev => [...prev, newProjectName.trim()]);
-    setNewProjectName('');
-    setIsAddingProject(false);
-  }, [newProjectName]);
+    try {
+      // 기본 날짜 설정 (현재 날짜부터 3개월 후)
+      const now = new Date();
+      const startDate = now.toISOString().split('T')[0]!;
+      const endDate = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]!;
+
+      await createProjectMutation.mutateAsync({
+        title: newProjectName.trim(),
+        startDate,
+        endDate,
+      });
+
+      setNewProjectName('');
+      setIsAddingProject(false);
+    } catch (error) {
+      console.error('프로젝트 생성 실패:', error);
+      // 에러 발생 시 인풋 필드는 유지하여 재시도 가능하도록 함
+    }
+  }, [newProjectName, createProjectMutation]);
 
   const handleCancelProject = useCallback(() => {
     setNewProjectName('');
@@ -56,6 +73,10 @@ export const Sidebar = () => {
       handleCancelProject();
     }
   }, [handleSaveProject, handleCancelProject]);
+
+  const handleProjectSelect = useCallback((projectId: number) => {
+    setSelectedProjectId(projectId);
+  }, []);
 
   return (
     <aside className="flex flex-col justify-start items-center h-full">
@@ -100,21 +121,42 @@ export const Sidebar = () => {
 
               <ul className="flex flex-col gap-2">
                 <AnimatePresence>
-                  {showContent &&
-                    projectList.map((name, idx) => (
+                  {/* 로딩 상태 */}
+                  {showContent && isLoading && (
+                    <motion.li className="text-sm text-neutral-500 py-1">
+                      프로젝트 로딩 중...
+                    </motion.li>
+                  )}
+
+                  {/* 에러 상태 */}
+                  {showContent && error && (
+                    <motion.li className="text-sm text-red-500 py-1">
+                      프로젝트 로딩 실패
+                    </motion.li>
+                  )}
+
+                  {/* 프로젝트 목록 */}
+                  {showContent && projects &&
+                    projects.map((project, idx) => (
                       <motion.li 
-                        key={name} 
+                        key={project.id} 
                         {...projectItemMotion(idx)}
-                        className="text-sm text-neutral-700 hover:text-neutral-900 cursor-pointer py-1"
+                        className={cn(
+                          "text-sm cursor-pointer py-1 px-2 rounded transition-colors duration-200",
+                          selectedProjectId === project.id
+                            ? "bg-neutral-300 text-neutral-900"
+                            : "text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900"
+                        )}
+                        onClick={() => handleProjectSelect(project.id)}
                       >
-                        {name}
+                        {project.title}
                       </motion.li>
                     ))}
                     
                   {/* 새 프로젝트 입력 */}
                   {showContent && isAddingProject && (
                     <motion.li 
-                      {...projectItemMotion(projectList.length)}
+                      {...projectItemMotion(projects?.length || 0)}
                       className="py-1"
                     >
                       <input
@@ -126,7 +168,11 @@ export const Sidebar = () => {
                         placeholder="프로젝트명을 입력하세요..."
                         className="w-full px-2 py-1 text-sm bg-transparent border-0 border-b border-neutral-300 rounded-none focus:outline-none focus:border-b-neutral-500 focus:border-b-2"
                         autoFocus
+                        disabled={createProjectMutation.isPending}
                       />
+                      {createProjectMutation.isPending && (
+                        <div className="text-xs text-neutral-500 mt-1">생성 중...</div>
+                      )}
                     </motion.li>
                   )}
                 </AnimatePresence>

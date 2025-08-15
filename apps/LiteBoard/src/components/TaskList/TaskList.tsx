@@ -2,6 +2,7 @@
 
 import { TodoCard } from "@LiteBoard/ui";
 import { useTasks } from "@/hooks/useTasks";
+import { useProjectContext } from "@/providers/ProjectProvider";
 
 // 태스크 상태 매핑
 const getTaskStatus = (status: string, daysLeft: number): 'latest' | 'notLatest' | 'delayed' | 'finished' => {
@@ -21,9 +22,10 @@ const getTaskStatus = (status: string, daysLeft: number): 'latest' | 'notLatest'
 
 // 태스크 목록 컴포넌트
 export function TaskList() {
-  const { data, isLoading, error } = useTasks();
+  const { selectedProjectId } = useProjectContext();
+  const { data, isLoading, error } = useTasks(selectedProjectId);
 
-  if (isLoading) {
+  if (!selectedProjectId || isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
@@ -58,7 +60,6 @@ export function TaskList() {
       {data.tasks.map((task) => {
         const status = getTaskStatus(task.status, task.daysLeft);
         
-        // API Todo 타입을 TodoCard에서 요구하는 타입으로 변환
         const todos = task.todos.map(todo => ({
           id: todo.id.toString(),
           text: todo.description,

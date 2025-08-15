@@ -36,6 +36,7 @@ export interface Task {
 // 업무조회 응답 타입
 export interface TasksResponse {
   myInfo: Member;
+  projectName: string;
   totalTodoCount: number;
   completedTodoCount: number;
   pendingTodoCount: number;
