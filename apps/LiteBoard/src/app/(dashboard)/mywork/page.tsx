@@ -51,11 +51,6 @@ export default function MyWorkPage() {
 
   return (
     <div className="relative">
-      {/* 프로젝트 이름 표시 */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-neutral-900">{data.projectName}</h1>
-      </div>
-      
       <DashboardSummary 
         total={data.totalTodoCount}
         completed={data.completedTodoCount}
