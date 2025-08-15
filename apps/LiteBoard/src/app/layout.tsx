@@ -29,8 +29,8 @@ export default function RootLayout({
       </head>
       <body className={`${pretendard.variable}`}>
         <QueryProvider>
-          {children}
-          {modal}
+        {children}
+        {modal}
         </QueryProvider>
       </body>
     </html>
