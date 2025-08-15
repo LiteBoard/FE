@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { FolderIcon, PlusIcon } from '@LiteBoard/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -30,11 +30,11 @@ export const Sidebar = () => {
     }
   };
 
-  const handleAddProject = useCallback(() => {
+  const handleAddProject = () => {
     setIsAddingProject(true);
-  }, []);
+  };
 
-  const handleSaveProject = useCallback(async () => {
+  const handleSaveProject = async () => {
     if (!newProjectName.trim()) {
       setIsAddingProject(false);
       setNewProjectName('');
@@ -57,26 +57,25 @@ export const Sidebar = () => {
       setIsAddingProject(false);
     } catch (error) {
       console.error('프로젝트 생성 실패:', error);
-      // 에러 발생 시 인풋 필드는 유지하여 재시도 가능하도록 함
     }
-  }, [newProjectName, createProjectMutation]);
+  };
 
-  const handleCancelProject = useCallback(() => {
+  const handleCancelProject = () => {
     setNewProjectName('');
     setIsAddingProject(false);
-  }, []);
+  };
 
-  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSaveProject();
     } else if (e.key === 'Escape') {
       handleCancelProject();
     }
-  }, [handleSaveProject, handleCancelProject]);
+  };
 
-  const handleProjectSelect = useCallback((projectId: number) => {
+  const handleProjectSelect = (projectId: number) => {
     setSelectedProjectId(projectId);
-  }, []);
+  };
 
   return (
     <aside className="flex flex-col justify-start items-center h-full">
