@@ -3,25 +3,11 @@
 import { TodoCard, HelpIcon } from "@LiteBoard/ui";
 import { useTasks } from "@/hooks/useTasks";
 import { useProjectContext } from "@/providers/ProjectProvider";
-
-// 태스크 상태 매핑
-const getTaskStatus = (status: string, daysLeft: number): 'latest' | 'notLatest' | 'delayed' | 'finished' => {
-  switch (status.toLowerCase()) {
-    case 'completed':
-      return 'finished';
-    case 'overdue':
-      return 'delayed';
-    case 'today':
-      return 'latest';
-    default:
-      return daysLeft <= 1 ? 'latest' : 'notLatest';
-  }
-};
-
-
+import { transformTaskForTodoCard } from "../utils/taskUtils";
+import { TaskListReturn } from "../types";
 
 // 태스크 목록 컴포넌트
-export function TaskList() {
+export function TaskList(): TaskListReturn {
   const { selectedProjectId } = useProjectContext();
   const { data, isLoading, error } = useTasks(selectedProjectId);
 
@@ -59,21 +45,13 @@ export function TaskList() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {data.tasks.map((task) => {
-        const status = getTaskStatus(task.status, task.daysLeft);
-        
-        const todos = task.todos.map(todo => ({
-          id: todo.id.toString(),
-          text: todo.description,
-          checked: todo.done,
-          assignee: todo.member.nickname,
-          requested: todo.isRequired,
-        }));
+        const { status, title, todos, taskId } = transformTaskForTodoCard(task);
 
         return (
           <TodoCard
-            key={task.taskId}
+            key={taskId}
             status={status}
-            title={task.title}
+            title={title}
             todos={todos}
           />
         );

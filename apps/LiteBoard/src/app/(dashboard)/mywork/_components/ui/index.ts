@@ -1,1 +1,2 @@
-export { MyWorkView } from './MyWorkView'; 
+export { MyWorkView } from './MyWorkView';
+export { TaskList } from './TaskList'; 
