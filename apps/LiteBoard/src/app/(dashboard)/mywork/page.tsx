@@ -4,6 +4,7 @@ import { DashboardSummary } from "@LiteBoard/ui";
 import { useTasks } from "@/hooks/useTasks";
 import { useProjectContext } from "@/providers/ProjectProvider";
 import { TaskList } from "@/components/TaskList";
+import { LoadingState, ErrorState, EmptyState } from "./_components";
 
 export default function MyWorkPage() {
   const { selectedProjectId } = useProjectContext();
@@ -13,40 +14,15 @@ export default function MyWorkPage() {
 
   // 프로젝트가 선택되지 않았거나 로딩 중일 때
   if (!selectedProjectId || isLoading) {
-    return (
-      <div className="relative">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded mb-6 w-64"></div>
-          <div className="flex gap-6">
-            <div className="w-[265px] h-[148px] bg-gray-200 rounded-3xl"></div>
-            <div className="w-[265px] h-[148px] bg-gray-200 rounded-3xl"></div>
-            <div className="w-[265px] h-[148px] bg-gray-200 rounded-3xl"></div>
-          </div>
-        </div>
-        <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   if (error) {
-    return (
-      <div className="relative">
-        <div className="text-red-500 p-4 bg-red-50 rounded-lg">
-          <h2 className="font-bold mb-2">데이터 로딩 오류</h2>
-          <p>{error.message}</p>
-        </div>
-        <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
-      </div>
-    );
+    return <ErrorState message={error.message} />;
   }
 
   if (!data) {
-    return (
-      <div className="relative">
-        <div className="text-gray-500 p-4">데이터가 없습니다.</div>
-        <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
-      </div>
-    );
+    return <EmptyState description="프로젝트를 선택하고 태스크를 추가해보세요." />;
   }
 
   return (
