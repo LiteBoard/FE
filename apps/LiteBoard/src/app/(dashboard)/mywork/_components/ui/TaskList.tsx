@@ -1,7 +1,7 @@
 "use client";
 
 import { TodoCard, HelpIcon } from "@LiteBoard/ui";
-import { useTasks } from "@/hooks/useTasks";
+import { useTasks } from "@/hooks";
 import { useProjectContext } from "@/providers/ProjectProvider";
 import { transformTaskForTodoCard } from "../utils/taskUtils";
 import { TaskListReturn } from "../types";

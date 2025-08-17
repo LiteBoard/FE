@@ -1,4 +1,5 @@
 import { TaskStatus } from '../types';
+import { Task } from '@/types/api';
 
 /**
  * 태스크 상태를 UI에 맞는 상태로 매핑하는 함수
@@ -24,10 +25,10 @@ export const getTaskStatus = (status: string, daysLeft: number): TaskStatus => {
  * @param task - 서버에서 받은 태스크 데이터
  * @returns TodoCard에서 사용할 수 있는 형태로 변환된 데이터
  */
-export const transformTaskForTodoCard = (task: any) => {
+export const transformTaskForTodoCard = (task: Task) => {
   const status = getTaskStatus(task.status, task.daysLeft);
   
-  const todos = task.todos.map((todo: any) => ({
+  const todos = task.todos.map((todo) => ({
     id: todo.id.toString(),
     text: todo.description,
     checked: todo.done,

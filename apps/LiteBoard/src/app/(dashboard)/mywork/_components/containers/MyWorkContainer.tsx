@@ -1,6 +1,6 @@
 "use client";
 
-import { useTasks } from "@/hooks/useTasks";
+import { useTasks } from "@/hooks";
 import { useProjectContext } from "@/providers/ProjectProvider";
 import { MyWorkView } from "../ui/MyWorkView";
 

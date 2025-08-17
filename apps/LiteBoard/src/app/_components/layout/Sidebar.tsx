@@ -8,7 +8,7 @@ import {
   sidebarPanelMotion,
   projectItemMotion,
 } from '../animation/sidebar.motion';
-import { useProjects, useCreateProject } from '@/hooks/useProjects';
+import { useProjects, useCreateProject } from '@/hooks';
 import { useProjectContext } from '@/providers/ProjectProvider';
 
 export const Sidebar = () => {

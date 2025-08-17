@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { useProjects } from '@/hooks/useProjects';
+import { useProjects } from '@/hooks/queries/useProjects';
 
 interface ProjectContextType {
   selectedProjectId: number | null;
