@@ -99,6 +99,12 @@ importers:
       '@LiteBoard/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@tanstack/react-query':
+        specifier: ^5.20.1
+        version: 5.81.5(react@18.2.0)
+      '@tanstack/react-query-devtools':
+        specifier: ^5.20.1
+        version: 5.81.5(@tanstack/react-query@5.81.5(react@18.2.0))(react@18.2.0)
       axios:
         specifier: ^1.8.1
         version: 1.10.0
