@@ -20,7 +20,7 @@ const TimelineDay = ({ days }: { days: Date[] }) => {
         return (
           <div
             key={index}
-            className="relative flex justify-center items-center h-[46px]"
+            className="relative flex justify-center items-center h-[46px] select-none"
           >
             <span
               className={cn('w-5 text-center text-text-B3M text-neutral-600', {
@@ -31,9 +31,6 @@ const TimelineDay = ({ days }: { days: Date[] }) => {
             >
               {format(day, 'd')}
             </span>
-            {isNow && (
-              <div className="absolute z-50 -bottom-1 left-[16.5px] w-2 h-2 bg-red-500 rounded-full" />
-            )}
           </div>
         );
       })}

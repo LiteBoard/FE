@@ -26,7 +26,7 @@ const categoryTaskList: { description: string; status: TaskStatus }[] = [
 
 const CategoryContainer = () => {
   return (
-    <div className="grid grid-rows-[93px_1fr] min-h-[752px] h-full w-[310px] bg-neutral-100 border-t border-r border-b border-neutral-200">
+    <div className="grid grid-rows-[93px_1fr] h-full w-[310px] bg-neutral-100 border-t border-r border-b border-neutral-200">
       <CategoryYearBox year={2025} />
 
       <div className="flex flex-col flex-shrink-0 px-5 py-4 gap-[2px]">
