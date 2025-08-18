@@ -7,15 +7,15 @@ interface ErrorStateProps {
   className?: string;
 }
 
-export const ErrorState: React.FC<ErrorStateProps> = ({ 
+export const ErrorState: React.FC<ErrorStateProps> = ({
   title = '데이터 로딩 오류',
   message,
-  className = ''
+  className = '',
 }) => {
   return (
-    <div className={`relative ${className}`}>
-      <div className="text-red-500 p-4 bg-red-50 rounded-lg">
-        <div className="flex items-center gap-2 mb-2">
+    <div className={`relative px-11 ${className}`}>
+      <div className="p-4 text-red-500 bg-red-50 rounded-lg">
+        <div className="flex gap-2 items-center mb-2">
           <WarnIcon width={20} height={20} />
           <h2 className="font-bold">{title}</h2>
         </div>
@@ -24,4 +24,4 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
     </div>
   );
-}; 
+};
