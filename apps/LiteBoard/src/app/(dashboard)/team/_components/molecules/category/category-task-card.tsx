@@ -5,7 +5,7 @@ import {
   TaskStatus,
 } from '../../consts/categoryTaskColorMap';
 import { cn } from '@/utils/cn';
-import { useTransformTaskStatus } from '../../hooks/useTransformTaskStatus';
+import { transformTaskStatus } from '../../hooks/transformTaskStatus';
 
 interface CategoryTaskCardProps {
   description: string;
@@ -24,7 +24,7 @@ const CategoryTaskCard = ({ description, status }: CategoryTaskCardProps) => {
             CATEGORY_TASK_STATUS_STYLES[status].bgColor
           )}
         >
-          {useTransformTaskStatus(status)}
+          {transformTaskStatus(status)}
         </div>
         <Profile name="성태현" size="sm" />
       </div>

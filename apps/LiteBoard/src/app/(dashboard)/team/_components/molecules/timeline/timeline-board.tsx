@@ -1,6 +1,6 @@
 import TimelineMonth from '../../atoms/timeline/timline-month';
 import TimelineDay from '../../atoms/timeline/timeline-day';
-import TimelineGridPannel from '../../atoms/timeline/timeline-grid-pannel';
+import TimelineGridPannel from './timeline-grid-pannel';
 import { Task } from '../../types/task';
 
 interface TimelineBoardProps {

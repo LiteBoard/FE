@@ -1,6 +1,6 @@
 import { TaskStatus } from '../consts/categoryTaskColorMap';
 
-export const useTransformTaskStatus = (status: TaskStatus) => {
+export const transformTaskStatus = (status: TaskStatus) => {
   switch (status) {
     case 'PENDING':
       return '대기중';

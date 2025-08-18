@@ -3,7 +3,7 @@ import { isSaturday, isSunday } from 'date-fns';
 import { differenceInDays } from 'date-fns';
 import { DAY_HEIGHT_PX, DAY_WIDTH_PX, START_DATE } from '../../consts/timeline';
 import { Task } from '../../types/task';
-import TimelineTaskCard from './timeline-task-card';
+import TimelineTaskCard from '../../atoms/timeline/timeline-task-card';
 import { transformDate } from '@/utils/transformDate';
 
 interface TimelineGridPannelProps {

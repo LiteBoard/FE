@@ -19,7 +19,6 @@ const CategoryField = () => {
       )}
       <button
         type="button"
-        role="button"
         className="flex justify-between items-center gap-3 text-neutral-600 p-1 pr-2 rounded-[6px] text-text-B3M w-[119px] h-6 hover:bg-neutral-200 hover:scale-105 active:scale-95 active:bg-neutral-300 transition-all duration-100"
         onClick={handleCategoryAdd}
       >
