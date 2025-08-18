@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Chip, Progress, Checkbox, Profile } from '../index';
+import { Chip, Progress, Checkbox, Profile, PlusLargeIcon } from '../index';
 
 interface Todo {
   id: string;
@@ -35,6 +35,8 @@ export const TodoCard = ({
 }: TodoCardProps) => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [isClient, setIsClient] = useState(false);
+  const [isAddingTodo, setIsAddingTodo] = useState(false);
+  const [newTodoText, setNewTodoText] = useState('');
 
   const isLatest = status === 'latest';
 
@@ -52,6 +54,47 @@ export const TodoCard = ({
       );
     });
   }, [isClient]);
+
+  // 새 투두 추가 핸들러
+  const handleAddTodo = useCallback(() => {
+    setIsAddingTodo(true);
+  }, []);
+
+  // 새 투두 저장 핸들러
+  const handleSaveTodo = useCallback(() => {
+    if (!newTodoText.trim()) {
+      setIsAddingTodo(false);
+      setNewTodoText('');
+      return;
+    }
+
+    const newTodo: Todo = {
+      id: Date.now().toString(),
+      text: newTodoText.trim(),
+      checked: false,
+      assignee: '나',
+      requested: false,
+    };
+
+    setTodos(prevTodos => [...prevTodos, newTodo]);
+    setNewTodoText('');
+    setIsAddingTodo(false);
+  }, [newTodoText]);
+
+  // 새 투두 취소 핸들러
+  const handleCancelTodo = useCallback(() => {
+    setNewTodoText('');
+    setIsAddingTodo(false);
+  }, []);
+
+  // 엔터키 처리
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSaveTodo();
+    } else if (e.key === 'Escape') {
+      handleCancelTodo();
+    }
+  }, [handleSaveTodo, handleCancelTodo]);
 
   // 현재 진행률 계산
   const done = todos.filter(todo => todo.checked).length;
@@ -103,10 +146,39 @@ export const TodoCard = ({
             </div>
           </div>
         ))}
+        
+        {/* 새 투두 추가 인풋 */}
+        {isAddingTodo && (
+          <div className="flex items-center">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <input
+                type="text"
+                value={newTodoText}
+                onChange={(e) => setNewTodoText(e.target.value)}
+                onKeyDown={handleKeyPress}
+                onBlur={handleSaveTodo}
+                placeholder="새 할일을 입력하세요"
+                className="w-full px-2 py-1 text-sm bg-transparent border-0 border-b border-blue-300 rounded-none focus:outline-none focus:border-b-blue-500 focus:border-b-1"
+                autoFocus
+              />
+            </div>
+            <div className="flex items-center gap-2 justify-center min-w-[140px] flex-shrink-0">
+              <Profile name="나" size="sm" variant="blue" />
+              <div className="w-8"></div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Add Button */}
-      <button className="text-netural-700 text-xl mt-2">+</button>
+      {!isAddingTodo && (
+        <button 
+          onClick={handleAddTodo}
+          className="flex items-center justify-start text-netural-700 mt-2 hover:bg-gray-100 rounded-lg p-2 transition-colors self-start"
+        >
+          <PlusLargeIcon className="text-neutral-600" />
+        </button>
+      )}
     </div>
   );
 };

@@ -1,0 +1,31 @@
+import React from 'react';
+import { HelpIcon } from '@LiteBoard/ui';
+
+interface EmptyStateProps {
+  title?: string;
+  description?: string;
+  icon?: React.ReactNode;
+  className?: string;
+}
+
+export const EmptyState: React.FC<EmptyStateProps> = ({ 
+  title = '데이터가 없습니다',
+  description,
+  icon = <HelpIcon width={48} height={48} className="text-neutral-400" />,
+  className = ''
+}) => {
+  return (
+    <div className={`relative ${className}`}>
+      <div className="flex flex-col items-center justify-center p-8 text-gray-500">
+        {icon}
+        <h3 className="mt-4 text-lg font-medium text-neutral-700">{title}</h3>
+        {description && (
+          <p className="mt-2 text-sm text-neutral-500 text-center max-w-md">
+            {description}
+          </p>
+        )}
+      </div>
+      <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
+    </div>
+  );
+}; 
