@@ -1,8 +1,8 @@
 import React from 'react';
-import { DashboardSummary } from "@LiteBoard/ui";
-import { TaskList } from "./TaskList";
-import { LoadingState, ErrorState, EmptyState } from "../states/";
-import { TasksResponse } from "@/types/api";
+import { DashboardSummary } from '@LiteBoard/ui';
+import { TaskList } from './TaskList';
+import { LoadingState, ErrorState, EmptyState } from '../states/';
+import { TasksResponse } from '@/types/api';
 
 interface MyWorkViewProps {
   selectedProjectId: string | number | null;
@@ -27,12 +27,14 @@ export const MyWorkView: React.FC<MyWorkViewProps> = ({
   }
 
   if (!data) {
-    return <EmptyState description="프로젝트를 선택하고 태스크를 추가해보세요." />;
+    return (
+      <EmptyState description="프로젝트를 선택하고 태스크를 추가해보세요." />
+    );
   }
 
   return (
-    <div className="relative">
-      <DashboardSummary 
+    <div className="relative px-11">
+      <DashboardSummary
         total={data.totalTodoCount}
         completed={data.completedTodoCount}
         pending={data.pendingTodoCount}
@@ -46,4 +48,4 @@ export const MyWorkView: React.FC<MyWorkViewProps> = ({
       </div>
     </div>
   );
-}; 
+};
