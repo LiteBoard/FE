@@ -1,6 +1,15 @@
+'use client';
+
 import { Button, Profile } from '@LiteBoard/ui';
+import { useRouter } from 'next/navigation';
 
 export const ProjectShare = () => {
+  const router = useRouter();
+
+  const handleShare = () => {
+    router.push('/project-share');
+  };
+
   return (
     <div className="flex gap-3 justify-center items-center">
       <div className="flex">
@@ -22,6 +31,7 @@ export const ProjectShare = () => {
         size="md"
         variant="outline"
         className="bg-neutral-100 text-neutral-700 hover:bg-neutral-200 active:bg-neutral-300"
+        onClick={handleShare}
       >
         공유하기
       </Button>

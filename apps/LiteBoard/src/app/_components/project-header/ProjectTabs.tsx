@@ -13,7 +13,10 @@ export const ProjectTabs = () => {
           key={index}
           href={`/${menu}`}
           className={`text-text-H3 hover:text-neutral-600 transition-colors duration-200 cursor-pointer select-none ${
-            pathname === `/${menu}` ? 'text-neutral-800' : 'text-neutral-300'
+            pathname === `/${menu}` ||
+            (menu === 'team' && pathname === '/project-share')
+              ? 'text-neutral-800'
+              : 'text-neutral-300'
           }`}
         >
           {menu === 'team' ? '팀' : '내 업무'}
