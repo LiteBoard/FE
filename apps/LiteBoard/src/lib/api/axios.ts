@@ -1,23 +1,45 @@
-import axios from "axios";
+import axios from 'axios';
+import { setCookie, getCookie, deleteCookie } from 'cookies-next';
 
 let accessToken: string | null = null;
+let refreshToken: string | null = null;
 
 export const setAccessToken = (token: string) => {
   accessToken = token;
-  localStorage.setItem("accessToken", token);
+  setCookie('accessToken', token);
+};
+
+export const setRefreshToken = (token: string) => {
+  refreshToken = token;
+  setCookie('refreshToken', token);
 };
 
 export const clearAccessToken = () => {
   accessToken = null;
-  localStorage.removeItem("accessToken");
+  refreshToken = null;
+  deleteCookie('accessToken');
+  deleteCookie('refreshToken');
 };
 
 export const getAccessToken = () => accessToken;
+export const getRefreshToken = () => {
+  // 메모리에 없으면 쿠키에서 다시 확인
+  if (!refreshToken && typeof window !== 'undefined') {
+    const tokenFromCookie = getCookie('refreshToken') as string | null;
+    if (tokenFromCookie) {
+      refreshToken = tokenFromCookie;
+    }
+  }
+  return refreshToken;
+};
 
-// 초기화 시 로컬스토리지에서 복원
-if (typeof window !== "undefined") {
-  const token = localStorage.getItem("accessToken");
-  if (token) accessToken = token;
+// 초기화 시 쿠키에서 복원
+if (typeof window !== 'undefined') {
+  const accessTokenFromCookie = getCookie('accessToken') as string | null;
+  const refreshTokenFromCookie = getCookie('refreshToken') as string | null;
+
+  if (accessTokenFromCookie) accessToken = accessTokenFromCookie;
+  if (refreshTokenFromCookie) refreshToken = refreshTokenFromCookie;
 }
 
 const api = axios.create({
@@ -40,9 +62,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => {
     // 응답 헤더에 새 토큰이 있을 경우 갱신
-    const newAccessToken = response.headers["authorization"];
+    const newAccessToken = response.headers['authorization'];
     if (newAccessToken) {
-      const token = newAccessToken.replace("Bearer ", "");
+      const token = newAccessToken.replace('Bearer ', '');
       setAccessToken(token);
     }
     return response;
@@ -50,10 +72,8 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry
-    ) {
+    // 액세스 토큰 만료 에러 코드 발생 시 리프래시 갱신 로직 수행
+    if (error.response?.data.code === 'TOKEN401' && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -61,17 +81,23 @@ api.interceptors.response.use(
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/reissue`,
           {},
-          { withCredentials: true }
+          {
+            headers: {
+              'Refresh-Token': getRefreshToken() || '',
+            },
+            withCredentials: true,
+          }
         );
 
-        const newAccessToken = res.headers["authorization"];
+        const newAccessToken = res.headers['authorization'];
         if (newAccessToken) {
-          const token = newAccessToken.replace("Bearer ", "");
+          const token = newAccessToken.replace('Bearer ', '');
           setAccessToken(token);
           originalRequest.headers.Authorization = `Bearer ${token}`;
           return api(originalRequest);
         }
       } catch (e) {
+        console.error(e);
         clearAccessToken();
       }
     }
@@ -80,4 +106,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api; 
+export default api;
