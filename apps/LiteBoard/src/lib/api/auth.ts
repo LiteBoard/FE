@@ -6,9 +6,3 @@ export async function getAccessTokenWithRefreshToken() {
   const res = await api.get('/auth/token');
   return res;
 }
-
-export async function reissueAccessToken() {
-  // Access Token 재발급 (Refresh-Token 쿠키 사용)
-  const res = await api.post('/auth/reissue');
-  return res;
-} 

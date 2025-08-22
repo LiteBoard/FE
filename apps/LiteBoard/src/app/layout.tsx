@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { QueryProvider } from '@/providers/QueryProvider';
-import { ProjectProvider } from '@/providers/ProjectProvider';
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -26,14 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
       </head>
       <body className={`${pretendard.variable}`}>
         <QueryProvider>
-          <ProjectProvider>
-            {children}
-            {modal}
-          </ProjectProvider>
+          {children}
+          {modal}
         </QueryProvider>
       </body>
     </html>
