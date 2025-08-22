@@ -1,13 +1,18 @@
 import { EMAIL_PATTERN } from '../constants/pattern';
 import { useEffect, useRef, useState } from 'react';
 
+interface EmailList {
+  email: string;
+  isValid: boolean;
+}
+
 const useEmail = () => {
   const ref = useRef<HTMLInputElement>(null);
   const [isComposing, setIsComposing] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [emailList, setEmailList] = useState<string[]>([]);
+  const [emailList, setEmailList] = useState<EmailList[]>([]);
 
   const isValidEmail = EMAIL_PATTERN.test(email);
 
@@ -20,30 +25,28 @@ const useEmail = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !isComposing) {
       e.preventDefault();
-      if (isValidEmail) {
-        if (!emailList.includes(email)) {
-          setEmailList((prev) => [...prev, email]);
-        }
+      if (email.trim() && !emailList.some((item) => item.email === email)) {
+        setEmailList((prev) => [...prev, { email, isValid: isValidEmail }]);
         setEmail('');
-        setEmailError(false);
-        setShowError(false);
-
-        requestAnimationFrame(() => ref.current?.focus());
-      } else {
-        setEmailError(true);
-        setShowError(true);
-
-        setTimeout(() => {
-          setShowError(false);
-        }, 3000);
+      }
+    } else if (
+      e.key === 'Backspace' &&
+      !isComposing &&
+      email === '' &&
+      emailList.length > 0
+    ) {
+      e.preventDefault();
+      const lastEmail = emailList[emailList.length - 1];
+      if (lastEmail) {
+        removeEmail(lastEmail.email);
       }
     }
   };
 
   const handleInviteClick = () => {
     if (isValidEmail) {
-      if (!emailList.includes(email)) {
-        setEmailList((prev) => [...prev, email]);
+      if (!emailList.some((item) => item.email === email)) {
+        setEmailList((prev) => [...prev, { email, isValid: isValidEmail }]);
       }
       setEmail('');
       setEmailError(false);
@@ -53,9 +56,12 @@ const useEmail = () => {
   };
 
   const removeEmail = (emailToRemove: string) => {
-    setEmailList((prev) => prev.filter((email) => email !== emailToRemove));
+    setEmailList((prev) => prev.filter((item) => item.email !== emailToRemove));
     requestAnimationFrame(() => ref.current?.focus());
   };
+
+  const isValidEmailList =
+    emailList.every((item) => item.isValid) && emailList.length > 0;
 
   return {
     ref,
@@ -63,6 +69,7 @@ const useEmail = () => {
     emailError,
     showError,
     isValidEmail,
+    isValidEmailList,
     emailList,
     handleKeyDown,
     handleInviteClick,

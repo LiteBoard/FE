@@ -11,7 +11,7 @@ const ProjectShareModal = () => {
     <Modal
       isOpen={true}
       title="프로젝트 공유"
-      width="630"
+      width="830"
       isActionModal={false}
       showCloseIcon={true}
       onCloseIconClick={() => {
