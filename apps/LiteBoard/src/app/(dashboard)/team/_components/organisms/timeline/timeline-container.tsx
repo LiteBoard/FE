@@ -40,9 +40,18 @@ const tasks = [
 ];
 
 const TimelineContainer = () => {
-  const days = useGenerateDays();
+  const { days, handleScroll, getInitialScrollPosition, getScrollAdjustment } =
+    useGenerateDays();
 
-  return <TimelineBoard days={days} tasks={tasks} />;
+  return (
+    <TimelineBoard
+      days={days}
+      tasks={tasks}
+      onScroll={handleScroll}
+      getInitialScrollPosition={getInitialScrollPosition}
+      getScrollAdjustment={getScrollAdjustment}
+    />
+  );
 };
 
 export default TimelineContainer;
