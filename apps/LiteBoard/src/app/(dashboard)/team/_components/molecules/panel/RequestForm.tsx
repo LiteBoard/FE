@@ -7,7 +7,7 @@ interface RequestFormProps {
   workRequest: WorkRequest;
 }
 
-const RequestForm = ({ receivedRequests, workRequest }: RequestFormProps) => {
+const RequestForm = ({ workRequest }: RequestFormProps) => {
   return (
     <div className="space-y-6 px-[10px]">
       {/* 받은 요청 */}
