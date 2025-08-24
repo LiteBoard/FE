@@ -18,13 +18,17 @@ const TodoList = ({ progress, todos }: TodoListProps) => {
       </div>
       <div className="space-y-2 ml-[98px]">
         {todos.map((todo) => (
-          <div key={todo.id} className="flex gap-[120px]">
-            <Checkbox 
-              size="md" 
-              label={todo.description} 
-              checked={todo.checked}
-            />
-            <Profile name={todo.assignee.nickname.charAt(0)} size="md" variant="blue" />
+          <div key={todo.id} className="flex">
+            <div className="flex-1 min-w-0">
+              <Checkbox 
+                size="md" 
+                label={todo.description} 
+                checked={todo.checked}
+              />
+            </div>
+            <div className="flex-shrink-0">
+              <Profile name={todo.assignee.nickname.charAt(0)} size="md" variant="blue" />
+            </div>
           </div>
         ))}
         <Button variant="borderless" size="md" className="p-1">

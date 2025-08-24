@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, TrashIcon } from '@LiteBoard/ui';
-import { cn } from '@/utils/cn';
 
 const TaskDeleteButton = () => {
   return (
