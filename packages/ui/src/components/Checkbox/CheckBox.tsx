@@ -55,7 +55,7 @@ export const Checkbox = ({
   return (
     <button
       type="button"
-      className="flex items-center cursor-pointer w-full"
+      className="flex items-center cursor-pointer"
       onClick={toggle}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
