@@ -146,8 +146,6 @@ importers:
         specifier: 5.8.2
         version: 5.8.2
 
-  packages/api: {}
-
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
@@ -236,6 +234,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      framer-motion:
+        specifier: ^12.23.6
+        version: 12.23.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       lucide-react:
         specifier: ^0.477.0
         version: 0.477.0(react@18.2.0)

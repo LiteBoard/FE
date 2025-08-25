@@ -2,6 +2,7 @@ export * from './Button';
 export * from './Chip';
 export * from './Icon';
 export * from './Modal';
+export * from './Panel';
 export * from './Profile';
 export * from './Progress';
 export * from './Chip';
