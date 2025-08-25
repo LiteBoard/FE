@@ -57,7 +57,6 @@ export const Panel = ({
   showOverlay = true,
   overlayClassName,
   className,
-  ...props
 }: PanelProps) => {
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -126,6 +125,7 @@ export const Panel = ({
             )}
             onKeyDown={handleKeyDown}
             tabIndex={-1}
+
           >
             {children}
           </motion.div>
