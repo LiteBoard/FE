@@ -53,7 +53,10 @@ export const Modal = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        style={{ minWidth: width ? `${width}px` : undefined }}
+        style={{
+          minWidth: width ? `${width}px` : undefined,
+          overflowY: 'visible',
+        }}
         className={cn(
           className,
           `${!isActionModal && 'gap-[56px] px-[35px] py-8'}`
