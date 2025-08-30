@@ -1,15 +1,19 @@
 'use client';
 
+import { useProjectContext } from '@/providers/ProjectProvider';
 import { Button, Profile } from '@LiteBoard/ui';
 import { useRouter, usePathname } from 'next/navigation';
 
 export const ProjectShare = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const { selectedProjectId, selectedProjectName } = useProjectContext();
 
   const handleShare = () => {
     const currentTab = pathname === '/mywork' ? 'mywork' : 'team';
-    router.push(`/project-share?currentTab=${currentTab}`);
+    router.push(
+      `/project-share?currentTab=${currentTab}&projectId=${selectedProjectId}&projectName=${selectedProjectName}`
+    );
   };
 
   return (

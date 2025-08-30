@@ -10,7 +10,6 @@ const useEmail = () => {
   const ref = useRef<HTMLInputElement>(null);
   const [isComposing, setIsComposing] = useState(false);
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(false);
   const [showError, setShowError] = useState(false);
   const [emailList, setEmailList] = useState<EmailList[]>([]);
 
@@ -43,18 +42,6 @@ const useEmail = () => {
     }
   };
 
-  const handleInviteClick = () => {
-    if (isValidEmail) {
-      if (!emailList.some((item) => item.email === email)) {
-        setEmailList((prev) => [...prev, { email, isValid: isValidEmail }]);
-      }
-      setEmail('');
-      setEmailError(false);
-      setShowError(false);
-      requestAnimationFrame(() => ref.current?.focus());
-    }
-  };
-
   const removeEmail = (emailToRemove: string) => {
     setEmailList((prev) => prev.filter((item) => item.email !== emailToRemove));
     requestAnimationFrame(() => ref.current?.focus());
@@ -66,16 +53,13 @@ const useEmail = () => {
   return {
     ref,
     email,
-    emailError,
     showError,
     isValidEmail,
     isValidEmailList,
     emailList,
     handleKeyDown,
-    handleInviteClick,
     removeEmail,
     setEmail,
-    setEmailError,
     setShowError,
     setIsComposing,
   };

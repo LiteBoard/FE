@@ -1,26 +1,41 @@
 'use client';
 
 import { Modal } from '@LiteBoard/ui';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import EmailField from './_components/email-field';
+import MemberList from './_components/member-list';
 
 const ProjectShareModal = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // const projectId = searchParams.get('projectId');
+  const projectName = searchParams.get('projectName');
 
   return (
     <Modal
       isOpen={true}
-      title="프로젝트 공유"
-      width="830"
+      title={`${projectName} 공유`}
+      width="632"
       isActionModal={false}
       showCloseIcon={true}
       onCloseIconClick={() => {
         router.back();
       }}
     >
-      <span className="absolute border border-t-neutral-200 h-[1px] top-[98px]" />
-      <div className="flex justify-center items-center w-full">
-        <EmailField />
+      <div className="flex flex-col justify-center items-center w-full gap-[56px]">
+        <div className="flex flex-col gap-3 justify-center items-start w-full">
+          <div className="flex justify-between items-center w-full">
+            <p className="text-text-T1 text-neutral-700">이메일로 초대</p>
+          </div>
+          <EmailField />
+        </div>
+
+        <span className="absolute top-[293px] w-full h-[1px] bg-neutral-200" />
+
+        <div className="flex flex-col gap-3 justify-center items-start w-full">
+          <p className="text-neutral-700 text-text-T1">멤버</p>
+          <MemberList />
+        </div>
       </div>
     </Modal>
   );
