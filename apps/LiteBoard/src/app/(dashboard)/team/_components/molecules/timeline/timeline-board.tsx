@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useLayoutEffect } from 'react';
 import TimelineMonth from '../../atoms/timeline/timline-month';
 import TimelineDay from '../../atoms/timeline/timeline-day';
 import TimelineGridPannel from './timeline-grid-pannel';
@@ -55,7 +55,7 @@ const TimelineBoard = ({
     return () => setGetInitialScrollPosition(null);
   }, [getInitialScrollPosition, setGetInitialScrollPosition]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const currentDaysLength = days.length;
     const previousDaysLength = previousDaysLengthRef.current;
 
@@ -66,14 +66,13 @@ const TimelineBoard = ({
     ) {
       const adjustment = getScrollAdjustment();
       if (adjustment > 0) {
+        console.log('[timeline-board] adjustment', adjustment);
+
         const newScrollLeft = lastScrollLeftRef.current + adjustment;
 
-        setTimeout(() => {
-          if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollLeft = newScrollLeft;
-            lastScrollLeftRef.current = newScrollLeft;
-          }
-        }, 0);
+        // DOM 업데이트 직후 즉시 스크롤 조정
+        scrollContainerRef.current.scrollLeft = newScrollLeft;
+        lastScrollLeftRef.current = newScrollLeft;
       }
     }
 
