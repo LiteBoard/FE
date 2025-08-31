@@ -17,34 +17,49 @@ export const MyWorkView: React.FC<MyWorkViewProps> = ({
   isLoading,
   error,
 }) => {
+
   // 프로젝트가 선택되지 않았거나 로딩 중일 때
   if (!selectedProjectId || isLoading) {
-    return <LoadingState />;
+    return (
+      <div className="h-full overflow-y-auto">
+        <LoadingState />
+      </div>
+    );
   }
 
   if (error) {
-    return <ErrorState message={error.message} />;
+    return (
+      <div className="h-full overflow-y-auto">
+        <ErrorState message={error.message} />
+      </div>
+    );
   }
 
   if (!data) {
     return (
-      <EmptyState description="프로젝트를 선택하고 태스크를 추가해보세요." />
+      <div className="h-full overflow-y-auto">
+        <EmptyState 
+          description="프로젝트를 선택하고 태스크를 추가해보세요." 
+        />
+      </div>
     );
   }
 
   return (
-    <div className="relative px-11">
-      <DashboardSummary
-        total={data.totalTodoCount}
-        completed={data.completedTodoCount}
-        pending={data.pendingTodoCount}
-        userName={data.myInfo.nickname}
-      />
-      <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
+    <div className="h-full overflow-y-auto">
+      <div className="relative px-11 pb-8">
+        <DashboardSummary
+          total={data.totalTodoCount}
+          completed={data.completedTodoCount}
+          pending={data.pendingTodoCount}
+          userName={data.myInfo.nickname}
+        />
+        <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
 
-      {/* 태스크 목록 */}
-      <div className="mt-8">
-        <TaskList />
+        {/* 태스크 목록 */}
+        <div className="mt-8">
+          <TaskList />
+        </div>
       </div>
     </div>
   );
