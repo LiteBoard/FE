@@ -1,8 +1,5 @@
 import React from 'react';
-import Assignee from '../../molecules/panel/Assignee';
-import Schedule from '../../molecules/panel/Schedule';
-import TodoList from '../../molecules/panel/TodoList';
-import RequestForm from '../../molecules/panel/RequestForm';
+import { Assignee, Schedule, TodoList, RequestForm } from '../../molecules/panel';
 import { TaskDetailData } from '../../types/panel';
 
 interface TaskDetailContentProps {
