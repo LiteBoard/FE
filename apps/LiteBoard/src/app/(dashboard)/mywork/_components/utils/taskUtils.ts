@@ -1,5 +1,7 @@
 import { TaskStatus } from '../types';
-import { Task } from '@/types/api';
+import { MyTasksResponse } from '@/types/project';
+
+type Task = MyTasksResponse['tasks'][0];
 
 /**
  * 태스크 상태를 UI에 맞는 상태로 매핑하는 함수

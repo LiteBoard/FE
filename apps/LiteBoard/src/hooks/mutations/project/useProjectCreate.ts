@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { projectService, Project, ProjectCreateResponse } from '@/services/projectService';
+import { projectService } from '@/services/projectService';
+import { Project, ProjectCreateResponse } from '@/types/project';
 
 // 프로젝트 생성 훅
 export const useCreateProject = () => {

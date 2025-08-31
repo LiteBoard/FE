@@ -1,7 +1,7 @@
 "use client";
 
 import { TodoCard, HelpIcon } from "@LiteBoard/ui";
-import { useTasks } from "@/hooks";
+import { useProjectMyTasks } from "@/hooks";
 import { useProjectContext } from "@/providers/ProjectProvider";
 import { transformTaskForTodoCard } from "../utils/taskUtils";
 import { TaskListReturn } from "../types";
@@ -9,7 +9,7 @@ import { TaskListReturn } from "../types";
 // 태스크 목록 컴포넌트
 export function TaskList(): TaskListReturn {
   const { selectedProjectId } = useProjectContext();
-  const { data, isLoading, error } = useTasks(selectedProjectId);
+  const { data, isLoading, error } = useProjectMyTasks(selectedProjectId);
 
   if (!selectedProjectId || isLoading) {
     return (

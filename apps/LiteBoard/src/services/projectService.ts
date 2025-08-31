@@ -1,28 +1,11 @@
 import api from '@/lib/api/axios';
 import { ApiResponse } from '@/types/api';
-
-// 프로젝트 생성 요청 인터페이스
-export interface CreateProjectRequest {
-  title: string;
-  startDate: string; // YYYY-MM-DD 형식
-  endDate: string;   // YYYY-MM-DD 형식
-}
-
-// 프로젝트 응답 인터페이스 (조회 API용)
-export interface Project {
-  id: number;
-  title: string;
-}
-
-// 프로젝트 생성 응답 인터페이스 (생성 API용)
-export interface ProjectCreateResponse {
-  id: number;
-  title: string;
-  startDate: string;
-  endDate: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import {
+  CreateProjectRequest,
+  Project,
+  ProjectCreateResponse,
+  MyTasksResponse,
+} from '@/types/project';
 
 // 프로젝트 서비스 객체
 export const projectService = {
@@ -65,6 +48,21 @@ export const projectService = {
     
     if (!response.data.success) {
       throw new Error(response.data.message || '프로젝트 조회에 실패했습니다.');
+    }
+    
+    return response.data.result;
+  },
+
+  /**
+   * 내 업무 조회 API
+   * @param projectId - 프로젝트 ID
+   * @returns 내 업무 정보
+   */
+  getMyTasks: async (projectId: number): Promise<MyTasksResponse> => {
+    const response = await api.get<ApiResponse<MyTasksResponse>>(`/api/v1/projects/${projectId}/tasks`);
+    
+    if (!response.data.success) {
+      throw new Error(response.data.message || '내 업무 조회에 실패했습니다.');
     }
     
     return response.data.result;

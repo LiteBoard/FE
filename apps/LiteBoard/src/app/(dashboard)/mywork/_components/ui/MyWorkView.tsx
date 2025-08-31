@@ -2,11 +2,11 @@ import React from 'react';
 import { DashboardSummary } from '@LiteBoard/ui';
 import { TaskList } from './TaskList';
 import { LoadingState, ErrorState, EmptyState } from '../states/';
-import { TasksResponse } from '@/types/api';
+import { MyTasksResponse } from '@/types/project';
 
 interface MyWorkViewProps {
   selectedProjectId: string | number | null;
-  data: TasksResponse | undefined;
+  data: MyTasksResponse | undefined;
   isLoading: boolean;
   error: Error | null;
 }
