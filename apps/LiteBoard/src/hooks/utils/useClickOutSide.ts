@@ -6,7 +6,6 @@ export const useClickOutside = (
 ) => {
   const handlerRef = useRef(handler);
 
-  // handler를 ref에 저장하여 최신 값을 유지
   useEffect(() => {
     handlerRef.current = handler;
   }, [handler]);
@@ -30,5 +29,5 @@ export const useClickOutside = (
       document.removeEventListener('mousedown', listener);
       document.removeEventListener('touchstart', listener);
     };
-  }, [ref]); // handler를 의존성 배열에서 제거
+  }, [ref]);
 };
