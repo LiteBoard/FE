@@ -11,6 +11,10 @@ interface TimelineBoardProps {
   onScroll?: (scrollLeft: number, containerWidth: number) => void;
   getInitialScrollPosition: () => number;
   getScrollAdjustment: () => number;
+  ensureDateRangeForScroll: (
+    targetScrollLeft: number,
+    containerWidth: number
+  ) => Promise<void>;
 }
 
 const TimelineBoard = ({
@@ -19,22 +23,28 @@ const TimelineBoard = ({
   onScroll,
   getInitialScrollPosition,
   getScrollAdjustment,
+  ensureDateRangeForScroll,
 }: TimelineBoardProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null); // 타임라인 보드 DOM 객체
   const isInitialRenderRef = useRef<boolean>(true); // 최초 렌더링 여부 플래그
   const previousDaysLengthRef = useRef<number>(0);
   const lastScrollLeftRef = useRef<number>(0);
+
   const setScrollContainer = useTimelineScrollStore(
-    (s) => s.setScrollContainer
+    (state) => state.setScrollContainer
   );
   const setGetInitialScrollPosition = useTimelineScrollStore(
-    (s) => s.setGetInitialScrollPosition
+    (state) => state.setGetInitialScrollPosition
+  );
+  const setEnsureDateRangeForScroll = useTimelineScrollStore(
+    (state) => state.setEnsureDateRangeForScroll
   );
 
   // 최초 렌더링 시 스크롤 위치 초기화
   useEffect(() => {
     if (scrollContainerRef.current && isInitialRenderRef.current) {
       const initialScrollPosition = getInitialScrollPosition();
+
       scrollContainerRef.current.scrollLeft = initialScrollPosition;
       lastScrollLeftRef.current = initialScrollPosition;
       isInitialRenderRef.current = false;
@@ -45,6 +55,7 @@ const TimelineBoard = ({
   useEffect(() => {
     if (scrollContainerRef.current) {
       setScrollContainer(scrollContainerRef.current);
+
       return () => setScrollContainer(null);
     }
   }, [setScrollContainer]);
@@ -52,8 +63,16 @@ const TimelineBoard = ({
   // 전역 스토어에 초기 스크롤 위치 저장
   useEffect(() => {
     setGetInitialScrollPosition(getInitialScrollPosition);
+
     return () => setGetInitialScrollPosition(null);
   }, [getInitialScrollPosition, setGetInitialScrollPosition]);
+
+  // 전역 스토어에 날짜 범위 보장 함수 저장
+  useEffect(() => {
+    setEnsureDateRangeForScroll(ensureDateRangeForScroll);
+
+    return () => setEnsureDateRangeForScroll(null);
+  }, [ensureDateRangeForScroll, setEnsureDateRangeForScroll]);
 
   useLayoutEffect(() => {
     const currentDaysLength = days.length;
@@ -66,11 +85,8 @@ const TimelineBoard = ({
     ) {
       const adjustment = getScrollAdjustment();
       if (adjustment > 0) {
-        console.log('[timeline-board] adjustment', adjustment);
-
         const newScrollLeft = lastScrollLeftRef.current + adjustment;
 
-        // DOM 업데이트 직후 즉시 스크롤 조정
         scrollContainerRef.current.scrollLeft = newScrollLeft;
         lastScrollLeftRef.current = newScrollLeft;
       }
