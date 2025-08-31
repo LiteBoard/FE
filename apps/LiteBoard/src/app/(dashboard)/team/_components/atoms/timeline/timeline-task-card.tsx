@@ -1,6 +1,7 @@
 import { cn } from '@utils/cn';
 import { Task } from '../../types/task';
 import { TASK_STATUS_STYLES } from '../../consts/taskColorMap';
+import { useTaskDetailStore } from '../../stores/useTaskDetailStore';
 
 interface TimelineTaskCardProps {
   task: Task;
@@ -15,11 +16,17 @@ const TimelineTaskCard = ({
   width,
   taskIndex,
 }: TimelineTaskCardProps) => {
+  const { openPanel } = useTaskDetailStore();
+
+  const handleClick = () => {
+    openPanel(task);
+  };
+
   return (
     <div
       key={task.id}
       className={cn(
-        'absolute top-0 h-[38px] flex items-center px-2 rounded-r-md border-l-[6px] border-r-2',
+        'absolute top-0 h-[38px] flex items-center px-2 rounded-r-md border-l-[6px] border-r-2 cursor-pointer hover:opacity-80 transition-opacity',
         TASK_STATUS_STYLES[task.status].bgColor,
         TASK_STATUS_STYLES[task.status].borderColor
       )}
@@ -28,6 +35,7 @@ const TimelineTaskCard = ({
         width: `${width}px`,
         top: `${taskIndex * (38 + 2) + 46}px`,
       }}
+      onClick={handleClick}
     >
       <div className="flex relative justify-between items-center w-full">
         <span className="text-text-T3 text-neutral-800">{task.name}</span>
