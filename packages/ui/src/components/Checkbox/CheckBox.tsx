@@ -55,7 +55,7 @@ export const Checkbox = ({
   return (
     <button
       type="button"
-      className="flex items-center cursor-pointer w-full"
+      className="flex items-start cursor-pointer"
       onClick={toggle}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -63,7 +63,7 @@ export const Checkbox = ({
       <div className={boxStyle}>
         {checked && <Check size={iconSize} color="white" />}
       </div>
-      <span className={`${labelColor} truncate`}>{label}</span>
+      <span className={`${labelColor} break-words leading-relaxed`}>{label}</span>
     </button>
   );
 };
