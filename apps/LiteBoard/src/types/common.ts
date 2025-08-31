@@ -17,15 +17,4 @@ export interface Todo {
   description: string;
   done: boolean;
   isRequired: boolean;
-}
-
-// 요청 카드 정보
-export interface RequestCard {
-  id: number;
-  content: string;
-  sender: Member;
-  todos: {
-    id: number;
-    description: string;
-  }[];
 } 

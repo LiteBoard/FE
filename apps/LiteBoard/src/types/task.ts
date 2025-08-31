@@ -1,4 +1,5 @@
-import { Member, TaskStatus, Todo, RequestCard } from './common';
+import { Member, TaskStatus, Todo } from './common';
+import { RequestCard } from './request';
 
 // 업무 담당자 배정 요청 인터페이스
 export interface AssignTaskMembersRequest {

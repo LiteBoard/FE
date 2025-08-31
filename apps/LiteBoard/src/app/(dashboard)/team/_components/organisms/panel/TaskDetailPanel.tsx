@@ -16,7 +16,9 @@ const TaskDetailPanel = () => {
 
   // 임시로 ID 1의 태스크 상세 데이터 조회
   const taskId = 1;
-  const { data: taskData, isLoading, error } = useTaskById(taskId);
+  const { data: taskData, isLoading, error } = useTaskById(taskId, {
+    enabled: isOpen // 패널이 열려있을 때만 쿼리 실행
+  });
   const toggleTodosMutation = useToggleTodos();
 
   // 투두 변경사항 핸들러

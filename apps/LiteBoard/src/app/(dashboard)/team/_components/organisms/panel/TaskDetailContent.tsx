@@ -42,10 +42,11 @@ const TaskDetailContent = ({
         <div className="absolute left-1/2 top-[120px] bottom-0 w-px bg-neutral-200 transform -translate-x-1/2" />
 
         {/* Right Column */}
-        <RequestForm 
-          receivedRequests={receivedRequests}
-          workRequest={workRequest}
-        />
+                       <RequestForm
+                 receivedRequests={receivedRequests}
+                 workRequest={workRequest}
+                 taskId={taskId}
+               />
       </div>
     </div>
   );
