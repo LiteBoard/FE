@@ -46,7 +46,7 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[120px] z-50 grid w-[350px] max-w-lg min-h-[200px] translate-x-[-50%] border bg-neutral-white px-8 py-6 shadow-modal duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] rounded-lg',
+        'fixed left-[50%] top-[50%] flex flex-col justify-between z-50 w-[350px] max-w-lg overflow-y-hidden translate-x-[-50%] translate-y-[-50%] border bg-neutral-white px-8 py-6 shadow-modal duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] rounded-lg',
         className
       )}
       {...props}
@@ -67,10 +67,7 @@ const DialogHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn(
-      'flex flex-col space-y-10 text-center sm:text-left',
-      className
-    )}
+    className={cn('flex flex-col text-center sm:text-left', className)}
     {...props}
   />
 );
@@ -87,15 +84,10 @@ const DialogFooter = ({
 );
 DialogFooter.displayName = 'DialogFooter';
 
-interface DialogTitleProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {
-  isActionModal?: boolean;
-}
-
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
-  DialogTitleProps
->(({ className, isActionModal, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
   <div className="">
     <DialogPrimitive.Title
       ref={ref}
@@ -105,9 +97,6 @@ const DialogTitle = React.forwardRef<
       )}
       {...props}
     />
-    {!isActionModal && (
-      <span className="absolute w-full border border-t-neutral-200 h-[1px] left-0 top-[98px]" />
-    )}
   </div>
 ));
 DialogTitle.displayName = 'DialogTitle';

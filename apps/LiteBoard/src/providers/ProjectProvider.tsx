@@ -1,6 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 import { useProjects } from '@/hooks/queries/useProjects';
 
 interface ProjectContextType {
@@ -24,12 +30,15 @@ interface ProjectProviderProps {
 }
 
 export const ProjectProvider = ({ children }: ProjectProviderProps) => {
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null
+  );
   const { data: projects } = useProjects();
 
-  const selectedProjectName = selectedProjectId 
-    ? projects?.find(project => project.id === selectedProjectId)?.title || null
-    : null;
+  const selectedProjectName = selectedProjectId
+    ? projects?.find((project) => project.id === selectedProjectId)?.title ||
+      null
+    : 'New Project NN';
 
   useEffect(() => {
     if (projects && projects.length > 0 && selectedProjectId === null) {
@@ -38,8 +47,10 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
   }, [projects, selectedProjectId]);
 
   return (
-    <ProjectContext.Provider value={{ selectedProjectId, setSelectedProjectId, selectedProjectName }}>
+    <ProjectContext.Provider
+      value={{ selectedProjectId, setSelectedProjectId, selectedProjectName }}
+    >
       {children}
     </ProjectContext.Provider>
   );
-}; 
+};

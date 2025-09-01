@@ -211,5 +211,6 @@ module.exports = {
     require('tailwind-scrollbar'),
     require('tailwindcss-gradients'),
     require('tailwindcss-interaction-variants'),
+    require('tailwind-scrollbar-hide'),
   ],
 };

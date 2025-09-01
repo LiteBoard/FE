@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAccessTokenWithRefreshToken, setAccessToken } from '@/lib/api';
 import { setRefreshToken } from '@/lib/api/axios';
+import { useUserStore } from '@/lib/store/user';
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { setUser } = useUserStore();
 
   useEffect(() => {
     const authenticate = async () => {
@@ -16,12 +18,18 @@ export default function GoogleCallbackPage() {
         // 서버가 쿠키로 Refresh Token을 설정했으므로
         // 별도 파라미터 없이 Access Token 요청
         const response = await getAccessTokenWithRefreshToken();
-        // console.log('구글 로그인 response', response);
+        console.log('구글 로그인 response', response);
 
         // HTTP 상태 코드 200 확인
         if (response.status === 200) {
           const authHeader = response.headers['authorization'];
           const refreshToken = response.headers['refresh-token'];
+
+          setUser({
+            id: response.data.id,
+            nickname: response.data.nickname,
+            profileUrl: response.data.profileUrl,
+          });
 
           if (authHeader?.startsWith('Bearer ')) {
             const token = authHeader.replace('Bearer ', '');
@@ -62,7 +70,7 @@ export default function GoogleCallbackPage() {
     };
 
     authenticate();
-  }, [router]);
+  }, [router, setUser]);
 
   if (isLoading) {
     return (

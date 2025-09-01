@@ -53,14 +53,19 @@ export const Modal = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        style={{ minWidth: width ? `${width}px` : undefined }}
-        className={cn(className, `${!isActionModal && 'px-[35px] py-8'}`)}
+        style={{
+          minWidth: width ? `${width}px` : undefined,
+          overflowY: 'visible',
+        }}
+        className={cn(
+          className,
+          `${!isActionModal && 'gap-[56px] px-[35px] py-8'}`
+        )}
         onClose={onCloseIconClick}
         showCloseIcon={showCloseIcon}
       >
         <DialogHeader>
           <DialogTitle
-            isActionModal={isActionModal}
             className={`${title?.length === 0 ? 'hidden' : ''} text-text-H2`}
           >
             {title}
@@ -74,37 +79,39 @@ export const Modal = ({
           )}
         </DialogHeader>
 
+        {!isActionModal && (
+          <span className="absolute w-full border border-t-neutral-200 h-[1px] left-0 top-[98px]" />
+        )}
+
         {children}
 
-        <DialogFooter>
-          {isButton && (
-            <>
-              <Button
-                type="button"
-                size={'el'}
-                color={'black'}
-                variant={'borderless'}
-                radius={'roundCorner'}
-                className={cn('whitespace-nowrap', leftClassName)}
-                onClick={onLeftButtonClick}
-              >
-                {leftText}
-              </Button>
-              <Button
-                type="button"
-                size={'el'}
-                color={'red'}
-                variant={'filled'}
-                radius={'roundCorner'}
-                className={cn('whitespace-nowrap', rightClassName)}
-                onClick={onRightButtonClick}
-                disabled={isDisabledButton}
-              >
-                {rightText}
-              </Button>
-            </>
-          )}
-        </DialogFooter>
+        {isButton && (
+          <DialogFooter>
+            <Button
+              type="button"
+              size={'el'}
+              color={'black'}
+              variant={'borderless'}
+              radius={'roundCorner'}
+              className={cn('whitespace-nowrap', leftClassName)}
+              onClick={onLeftButtonClick}
+            >
+              {leftText}
+            </Button>
+            <Button
+              type="button"
+              size={'el'}
+              color={'red'}
+              variant={'filled'}
+              radius={'roundCorner'}
+              className={cn('whitespace-nowrap', rightClassName)}
+              onClick={onRightButtonClick}
+              disabled={isDisabledButton}
+            >
+              {rightText}
+            </Button>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );
