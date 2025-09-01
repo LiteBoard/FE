@@ -1,9 +1,14 @@
 'use client';
 import { create } from 'zustand';
 
+interface ScrollPosition {
+  scrollLeft: number;
+  containerWidth: number;
+}
+
 interface TimelineScrollStore {
-  scrollContainer: HTMLDivElement | null;
-  setScrollContainer: (el: HTMLDivElement | null) => void;
+  scrollPosition: ScrollPosition | null;
+  setScrollPosition: (position: ScrollPosition | null) => void;
   scrollBy: (scrollPosition: number) => Promise<void>;
   scrollTo: (leftPx: number) => Promise<void>;
   getInitialScrollPosition: (() => number) | null;
@@ -17,57 +22,71 @@ interface TimelineScrollStore {
       | null
   ) => void;
   scrollToToday: () => Promise<void>;
+  onScrollBy: ((scrollPosition: number) => void) | null;
+  onScrollTo: ((leftPx: number) => void) | null;
+  setOnScrollBy: (callback: ((scrollPosition: number) => void) | null) => void;
+  setOnScrollTo: (callback: ((leftPx: number) => void) | null) => void;
 }
 
 export const useTimelineScrollStore = create<TimelineScrollStore>(
   (set, get) => ({
-    scrollContainer: null,
+    scrollPosition: null,
     getInitialScrollPosition: null,
     ensureDateRangeForScroll: null,
-    setScrollContainer: (el) => set({ scrollContainer: el }),
+    onScrollBy: null,
+    onScrollTo: null,
+
+    setScrollPosition: (position) => set({ scrollPosition: position }),
     setGetInitialScrollPosition: (fn) => set({ getInitialScrollPosition: fn }),
     setEnsureDateRangeForScroll: (fn) => set({ ensureDateRangeForScroll: fn }),
-    scrollBy: async (scrollPosition) => {
-      const el = get().scrollContainer;
-      const ensureRange = get().ensureDateRangeForScroll;
+    setOnScrollBy: (callback) => set({ onScrollBy: callback }),
+    setOnScrollTo: (callback) => set({ onScrollTo: callback }),
 
-      if (el && ensureRange) {
-        const currentScrollLeft = el.scrollLeft;
-        const targetScrollLeft = currentScrollLeft + scrollPosition;
-        const containerWidth = el.clientWidth;
+    scrollBy: async (scrollPosition) => {
+      const currentPosition = get().scrollPosition;
+      const ensureRange = get().ensureDateRangeForScroll;
+      const onScrollBy = get().onScrollBy;
+
+      if (currentPosition && ensureRange && onScrollBy) {
+        const targetScrollLeft = currentPosition.scrollLeft + scrollPosition;
+        const containerWidth = currentPosition.containerWidth;
 
         // 필요한 날짜 범위를 미리 로드
         await ensureRange(targetScrollLeft, containerWidth);
-        // 스크롤 실행
-        el.scrollBy({ left: scrollPosition, behavior: 'smooth' });
+        // 외부 콜백을 통해 DOM 조작 실행
+        onScrollBy(scrollPosition);
       }
     },
-    scrollTo: async (leftPx) => {
-      const el = get().scrollContainer;
-      const ensureRange = get().ensureDateRangeForScroll;
 
-      if (el && ensureRange) {
-        const containerWidth = el.clientWidth;
+    scrollTo: async (leftPx) => {
+      const currentPosition = get().scrollPosition;
+      const ensureRange = get().ensureDateRangeForScroll;
+      const onScrollTo = get().onScrollTo;
+
+      if (currentPosition && ensureRange && onScrollTo) {
+        const containerWidth = currentPosition.containerWidth;
 
         // 필요한 날짜 범위를 미리 로드
         await ensureRange(leftPx, containerWidth);
-        // 스크롤 실행
-        el.scrollTo({ left: leftPx, behavior: 'smooth' });
+        // 외부 콜백을 통해 DOM 조작 실행
+        onScrollTo(leftPx);
       }
     },
+
     scrollToToday: async () => {
-      const el = get().scrollContainer;
+      const currentPosition = get().scrollPosition;
       const getPos = get().getInitialScrollPosition;
       const ensureRange = get().ensureDateRangeForScroll;
+      const onScrollTo = get().onScrollTo;
 
-      if (el && getPos && ensureRange) {
+      if (currentPosition && getPos && ensureRange && onScrollTo) {
         const targetScrollLeft = getPos();
-        const containerWidth = el.clientWidth;
+        const containerWidth = currentPosition.containerWidth;
 
         // 필요한 날짜 범위를 미리 로드
         await ensureRange(targetScrollLeft, containerWidth);
-        // 스크롤 실행
-        el.scrollTo({ left: targetScrollLeft, behavior: 'smooth' });
+        // 외부 콜백을 통해 DOM 조작 실행
+        onScrollTo(targetScrollLeft);
       }
     },
   })
