@@ -3,7 +3,7 @@ import { ALL_OPTIONS, Role, RoleOption } from './constants/role';
 import useRoleSelect from './hooks/useRoleSelect';
 import RoleDropdown from './role-dropdown';
 import RoleSelect from './role-select';
-import { memo, useCallback, useRef } from 'react';
+import { memo, useRef } from 'react';
 
 interface MockMember {
   id: string;
@@ -27,25 +27,18 @@ const MemberSelect = memo(
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const handleClickOutside = useCallback(() => {
-      if (isOpen) {
-        setIsOpen(false);
-      }
-    }, [setIsOpen, isOpen]);
+    useClickOutside(ref, () => {
+      setIsOpen(false);
+    });
 
-    useClickOutside(ref, handleClickOutside);
+    const handleRoleChange = (role: Role) => {
+      setSelectedRole(role);
+      onRoleChange(member.id, role);
+    };
 
-    const handleRoleChange = useCallback(
-      (role: Role) => {
-        setSelectedRole(role);
-        onRoleChange(member.id, role);
-      },
-      [setSelectedRole, onRoleChange, member.id]
-    );
-
-    const handleDelete = useCallback(() => {
+    const handleDelete = () => {
       onDelete(member.id);
-    }, [onDelete, member.id]);
+    };
 
     return (
       <div ref={ref}>
@@ -68,9 +61,6 @@ const MemberSelect = memo(
         />
       </div>
     );
-  },
-  (prevProps, nextProps) => {
-    return prevProps.member.id === nextProps.member.id;
   }
 );
 
