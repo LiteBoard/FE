@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { TextField, Checkbox, Button, PlusIcon, HelpIcon } from '@LiteBoard/ui';
 import { ReceivedRequest, WorkRequest } from '../../types/panel';
 import { useCreateRequestCard } from '@/hooks/mutations/requestCard/useCreateRequestCard';
 import { useRequestCardList } from '@/hooks/queries/requestCard/useRequestCardList';
 import { CreateRequestCardRequest } from '@/types/request';
+import { useClickOutside } from '@/hooks/utils/useClickOutSide';
 import ReceivedRequestCard from './ReceivedRequestCard';
 
 interface RequestFormProps {
@@ -28,18 +29,11 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
   );
 
   // 클릭 외부 감지로 메뉴 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenuForRequestId(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  useClickOutside(menuRef, () => {
+    if (showMenuForRequestId !== null) {
+      setShowMenuForRequestId(null);
+    }
+  });
 
   const handleAddTodo = () => {
     if (newTodoText.trim()) {

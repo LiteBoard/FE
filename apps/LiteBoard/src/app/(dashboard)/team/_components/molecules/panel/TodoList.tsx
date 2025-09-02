@@ -1,10 +1,11 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Progress, Checkbox, Profile, Button, PlusIcon, TextField, TodoActionMenu } from '@LiteBoard/ui';
 import { Progress as ProgressType, TodoItem } from '../../types/panel';
 import { useCreateTodo } from '@/hooks/mutations/todo/useCreateTodo';
 import { useUpdateTodo } from '@/hooks/mutations/todo/useUpdateTodo';
 import { useDeleteTodo } from '@/hooks/mutations/todo/useDeleteTodo';
 import { CreateTodoRequest, UpdateTodoRequest } from '@/types/todo';
+import { useClickOutside } from '@/hooks/utils/useClickOutSide';
 
 interface TodoListProps {
   progress: ProgressType;
@@ -97,21 +98,11 @@ const TodoList = ({ progress, todos, taskId, onTodoChanges }: TodoListProps) => 
   };
 
   // 메뉴 외부 클릭 시 메뉴 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenuForTodoId(null);
-      }
-    };
-
+  useClickOutside(menuRef, () => {
     if (showMenuForTodoId !== null) {
-      document.addEventListener('mousedown', handleClickOutside);
+      setShowMenuForTodoId(null);
     }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMenuForTodoId]);
+  });
 
   // 투두 추가 핸들러
   const handleAddTodo = () => {

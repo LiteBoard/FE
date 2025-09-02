@@ -3,7 +3,6 @@ import { DashboardSummary } from '@LiteBoard/ui';
 import { TaskList } from './TaskList';
 import { LoadingState, ErrorState, EmptyState } from '../states/';
 import { MyTasksResponse } from '@/types/project';
-import { useUserStore } from '@/lib/store/user';
 
 
 interface MyWorkViewProps {
@@ -18,7 +17,6 @@ export const MyWorkView: React.FC<MyWorkViewProps> = ({
   isLoading,
   error,
 }) => {
-  const { user } = useUserStore();
 
   if (isLoading) {
     return <LoadingState />;
