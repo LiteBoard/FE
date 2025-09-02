@@ -2,78 +2,77 @@
 
 import React from 'react';
 import { Panel } from '@LiteBoard/ui';
-import { useTaskDetailStore } from '../../stores/useTaskDetailStore';
-import { TaskStatus } from '../../consts/categoryTaskColorMap';
-import { TaskDetailData } from '../../types/panel';
 import TaskHeader from '../../molecules/panel/TaskHeader';
 import TaskDetailContent from './TaskDetailContent';
+import TaskDetailError from './components/TaskDetailError';
+import { useTaskDetailPanel } from './hooks/useTaskDetailPanel';
+import { transformTaskDataToPanelData } from './utils/taskDataTransformer';
 
 const TaskDetailPanel = () => {
-  const { isOpen, selectedTask, closePanel } = useTaskDetailStore();
+  const {
+    isOpen,
+    taskId,
+    taskData,
+    isLoading,
+    error,
+    handleTodoChanges,
+    handleClosePanel,
+  } = useTaskDetailPanel();
 
-  if (!selectedTask) return null;
+  // 패널이 닫혀있으면 렌더링하지 않음
+  if (!isOpen) return null;
 
-  const taskStatus: TaskStatus = 'IN_PROGRESS';
+  // 로딩, 에러, 데이터 없음 상태 처리
+  if (isLoading) {
+    return (
+      <TaskDetailError
+        isOpen={isOpen}
+        onClose={handleClosePanel}
+        type="loading"
+      />
+    );
+  }
 
-  const mockData: TaskDetailData = {
-    assignee: {
-      id: 1,
-      nickname: 'Kang',
-      profileUrl: '',
-    },
-    schedule: {
-      startDate: '7월 2일',
-      endDate: '7월 4일',
-    },
-    progress: {
-      current: 1,
-      total: 4,
-    },
-    todos: [
-      {
-        id: 1,
-        description: '디자인 시스템 구축',
-        isRequired: true,
-        assignee: {
-          id: 1,
-          nickname: 'K',
-          profileUrl: '',
-        },
-        checked: false,
-      },
-      {
-        id: 2,
-        description: 'API 연동 작업',
-        isRequired: false,
-        assignee: {
-          id: 2,
-          nickname: 'J',
-          profileUrl: '',
-        },
-        checked: true,
-      },
-    ],
-    receivedRequests: [],
-    workRequest: {
-      placeholder: '어떤 요청인가요?',
-      todoLabel: 'Todo를 입력해 보세요.',
-    },
-  };
+  if (error) {
+    return (
+      <TaskDetailError
+        isOpen={isOpen}
+        onClose={handleClosePanel}
+        type="error"
+        error={error}
+      />
+    );
+  }
+
+  if (!taskData) {
+    return (
+      <TaskDetailError
+        isOpen={isOpen}
+        onClose={handleClosePanel}
+        type="not-found"
+      />
+    );
+  }
+
+  // API 데이터를 UI 데이터로 변환
+  const panelData = transformTaskDataToPanelData(taskData);
 
   return (
-    <Panel isOpen={isOpen} onClose={closePanel} height="fixed">
+    <Panel isOpen={isOpen} onClose={handleClosePanel} height="fixed">
       <div className="flex flex-col h-full">
         <TaskHeader 
-          status={taskStatus}
-          title="테스크 타이틀"
+          status={taskData.status}
+          title={taskData.title}
         />
         <TaskDetailContent 
-          assignee={mockData.assignee}
-          schedule={mockData.schedule}
-          progress={mockData.progress}
-          todos={mockData.todos}
-          receivedRequests={mockData.receivedRequests}
-          workRequest={mockData.workRequest}
+          assignee={panelData.assignee}
+          schedule={panelData.schedule}
+          progress={panelData.progress}
+          todos={panelData.todos}
+          receivedRequests={panelData.receivedRequests}
+          workRequest={panelData.workRequest}
+          taskId={taskId}
+          onTodoChanges={handleTodoChanges}
         />
       </div>
     </Panel>

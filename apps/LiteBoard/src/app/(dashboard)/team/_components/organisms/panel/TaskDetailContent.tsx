@@ -9,6 +9,8 @@ interface TaskDetailContentProps {
   todos: TaskDetailData['todos'];
   receivedRequests: TaskDetailData['receivedRequests'];
   workRequest: TaskDetailData['workRequest'];
+  taskId?: number; // 태스크 ID 추가
+  onTodoChanges?: (changes: Map<number, boolean>) => void; // 투두 변경사항 핸들러
 }
 
 const TaskDetailContent = ({
@@ -18,6 +20,8 @@ const TaskDetailContent = ({
   todos,
   receivedRequests,
   workRequest,
+  taskId,
+  onTodoChanges,
 }: TaskDetailContentProps) => {
   return (
     <div className="flex-1 p-[40px]">
@@ -29,6 +33,8 @@ const TaskDetailContent = ({
           <TodoList 
             progress={progress}
             todos={todos}
+            taskId={taskId}
+            onTodoChanges={onTodoChanges}
           />
         </div>
 
@@ -36,10 +42,11 @@ const TaskDetailContent = ({
         <div className="absolute left-1/2 top-[120px] bottom-0 w-px bg-neutral-200 transform -translate-x-1/2" />
 
         {/* Right Column */}
-        <RequestForm 
-          receivedRequests={receivedRequests}
-          workRequest={workRequest}
-        />
+                       <RequestForm
+                 receivedRequests={receivedRequests}
+                 workRequest={workRequest}
+                 taskId={taskId}
+               />
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import {
   sidebarPanelMotion,
   projectItemMotion,
 } from '../animation/sidebar.motion';
-import { useProjects, useCreateProject } from '@/hooks';
+import { useProjectList, useProjectCreate } from '@/hooks';
 import { useProjectContext } from '@/providers/ProjectProvider';
 
 export const Sidebar = () => {
@@ -18,8 +18,8 @@ export const Sidebar = () => {
   const [newProjectName, setNewProjectName] = useState('');
   const { selectedProjectId, setSelectedProjectId } = useProjectContext();
 
-  const { data: projects, isLoading, error } = useProjects();
-  const createProjectMutation = useCreateProject();
+  const { data: projects, isLoading, error } = useProjectList();
+  const createProjectMutation = useProjectCreate();
 
   const handleToggle = () => {
     if (open) {

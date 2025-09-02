@@ -1,13 +1,8 @@
 'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from 'react';
-import { useProjects } from '@/hooks/queries/useProjects';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useProjectList } from '@/hooks/queries';
+
 
 interface ProjectContextType {
   selectedProjectId: number | null;
@@ -30,10 +25,8 @@ interface ProjectProviderProps {
 }
 
 export const ProjectProvider = ({ children }: ProjectProviderProps) => {
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null
-  );
-  const { data: projects } = useProjects();
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const { data: projects } = useProjectList();
 
   const selectedProjectName = selectedProjectId
     ? projects?.find((project) => project.id === selectedProjectId)?.title ||

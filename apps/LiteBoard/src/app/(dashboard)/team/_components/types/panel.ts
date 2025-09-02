@@ -1,4 +1,4 @@
-import { Member, Todo } from '@/types/api';
+import { Member, Todo } from '@/types/common';
 
 export type Assignee = Member;
 
