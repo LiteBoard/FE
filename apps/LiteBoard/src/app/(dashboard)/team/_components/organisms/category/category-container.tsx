@@ -1,22 +1,55 @@
 'use client';
 
-import { HelpIcon, PlusIcon } from '@LiteBoard/ui';
+import { HelpIcon, InputLabel, PlusIcon } from '@LiteBoard/ui';
 import { TaskStatus } from '../../consts/categoryTaskColorMap';
 import CategoryYearBox from '../../atoms/category/category-yearbox';
 import CategoryTaskCard from '../../molecules/category/category-task-card';
 import CategoryField from '../../molecules/category/category-field';
 import { CategoryListResponse } from '@/types/category';
+import { useCreateTask } from '@/hooks';
+import { addDays } from 'date-fns';
+import { useState, useRef } from 'react';
 
 const CategoryContainer = ({
   categoryList,
 }: {
   categoryList: CategoryListResponse[];
 }) => {
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null
+  );
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [isComposing, setIsComposing] = useState(false);
+  const taskInputRef = useRef<HTMLInputElement>(null);
+
+  const { mutate: createTask } = useCreateTask();
+
+  const handleAddTask = (categoryId: number) => {
+    createTask(
+      {
+        categoryId,
+        taskData: {
+          title: newTaskTitle,
+          description: '',
+          startDate: new Date().toISOString(),
+          endDate: addDays(new Date(), 2).toISOString(),
+        },
+      },
+      {
+        onSuccess: () => {
+          setSelectedCategoryId(null);
+          setNewTaskTitle('');
+        },
+      }
+    );
+  };
+
   return (
     <div className="grid grid-rows-[93px_1fr] h-full w-[310px] bg-neutral-100 border-t border-r border-b border-neutral-200">
+      {/* TODO: 스크롤에 따른 연동 변경 로직 추가 필요 */}
       <CategoryYearBox year={2025} />
 
-      <div className="flex flex-col flex-shrink-0 gap-4 px-5 py-4">
+      <div className="flex flex-col flex-shrink-0 gap-4 px-5 py-4 h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-200 scrollbar-track-transparent">
         {categoryList && categoryList.length > 0 ? (
           <>
             {categoryList.map((category) => (
@@ -26,7 +59,16 @@ const CategoryContainer = ({
                     {category.title}
                   </p>
                   <div className="p-1 rounded-lg transition-all duration-100 cursor-pointer hover:bg-neutral-200 active:scale-95 active:bg-neutral-300">
-                    <PlusIcon width={20} height={20} />
+                    <PlusIcon
+                      width={20}
+                      height={20}
+                      onClick={() => {
+                        setSelectedCategoryId(category.id);
+                        setTimeout(() => {
+                          taskInputRef.current?.focus();
+                        }, 10);
+                      }}
+                    />
                   </div>
                 </div>
 
@@ -39,6 +81,27 @@ const CategoryContainer = ({
                       members={task.members.length > 0 ? task.members : null}
                     />
                   ))}
+                </div>
+
+                <div className="mt-2">
+                  {selectedCategoryId === category.id && (
+                    <InputLabel
+                      ref={taskInputRef}
+                      placeholder="새 테스크"
+                      onCompositionStart={() => setIsComposing(true)}
+                      onCompositionEnd={() => setIsComposing(false)}
+                      onChange={(e) => setNewTaskTitle(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !isComposing) {
+                          handleAddTask(category.id);
+                        } else if (e.key === 'Escape') {
+                          setNewTaskTitle('');
+                          setSelectedCategoryId(null);
+                        }
+                      }}
+                      className="w-full border border-neutral-300 bg-neutral-200"
+                    />
+                  )}
                 </div>
               </div>
             ))}
