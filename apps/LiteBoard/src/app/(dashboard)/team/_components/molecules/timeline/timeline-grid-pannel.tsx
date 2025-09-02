@@ -2,14 +2,15 @@ import { cn } from '@utils/cn';
 import { isSaturday, isSunday } from 'date-fns';
 import { differenceInDays } from 'date-fns';
 import { DAY_HEIGHT_PX, DAY_WIDTH_PX } from '../../consts/timeline';
-import { Task } from '../../types/task';
+
 import TimelineTaskCard from '../../atoms/timeline/timeline-task-card';
 import { transformDate } from '@/utils/transformDate';
 import { useEffect, useState } from 'react';
+import { TaskData } from '@/types/category';
 
 interface TimelineGridPannelProps {
   days: Date[];
-  tasks: Task[];
+  tasks: TaskData[][];
 }
 
 const TimelineGridPannel = ({ days, tasks }: TimelineGridPannelProps) => {
@@ -86,29 +87,43 @@ const TimelineGridPannel = ({ days, tasks }: TimelineGridPannelProps) => {
         ).flat()}
 
         {/* 태스크 바 렌더링 영역 */}
-        {tasks.map((task, taskIndex) => {
-          const startDayIndex = differenceInDays(
-            transformDate(task.startDate),
-            startDate
-          );
-          const duration =
-            differenceInDays(
-              transformDate(task.endDate),
-              transformDate(task.startDate)
-            ) + 1;
-          const left = startDayIndex * DAY_WIDTH_PX;
-          const width = duration * DAY_WIDTH_PX;
+        {(() => {
+          let globalTaskIndex = 0;
+          const elements: React.ReactElement[] = [];
 
-          return (
-            <TimelineTaskCard
-              key={task.id}
-              task={task}
-              left={left}
-              width={width}
-              taskIndex={taskIndex}
-            />
-          );
-        })}
+          tasks.forEach((taskGroup, groupIndex) => {
+            taskGroup.forEach((task) => {
+              const startDayIndex = differenceInDays(
+                transformDate(task.startDate),
+                startDate
+              );
+              const duration =
+                differenceInDays(
+                  transformDate(task.endDate),
+                  transformDate(task.startDate)
+                ) + 1;
+              const left = startDayIndex * DAY_WIDTH_PX;
+              const width = duration * DAY_WIDTH_PX;
+
+              elements.push(
+                <TimelineTaskCard
+                  key={task.id}
+                  task={task}
+                  left={left}
+                  width={width}
+                  taskIndex={globalTaskIndex}
+                />
+              );
+              globalTaskIndex++;
+            });
+
+            if (groupIndex < tasks.length - 1) {
+              globalTaskIndex++;
+            }
+          });
+
+          return elements;
+        })()}
       </div>
     </div>
   );

@@ -2,12 +2,12 @@ import { useRef, useEffect, useLayoutEffect } from 'react';
 import TimelineMonth from '../../atoms/timeline/timline-month';
 import TimelineDay from '../../atoms/timeline/timeline-day';
 import TimelineGridPannel from './timeline-grid-pannel';
-import { Task } from '../../types/task';
 import { useTimelineScrollStore } from '../../stores/useTimelineScrollStore';
+import { TaskData } from '@/types/category';
 
 interface TimelineBoardProps {
   days: Date[];
-  tasks: Task[];
+  tasks: TaskData[][];
   onScroll?: (scrollLeft: number, containerWidth: number) => void;
   getInitialScrollPosition: () => number;
   getScrollAdjustment: () => number;

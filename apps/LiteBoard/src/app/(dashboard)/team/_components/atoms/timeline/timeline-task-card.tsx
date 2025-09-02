@@ -1,10 +1,11 @@
 import { cn } from '@utils/cn';
-import { Task } from '../../types/task';
+import { TaskData } from '@/types/category';
 import { TASK_STATUS_STYLES } from '../../consts/taskColorMap';
 import { useTaskDetailStore } from '../../stores/useTaskDetailStore';
+import { TaskStatus } from '../../consts/categoryTaskColorMap';
 
 interface TimelineTaskCardProps {
-  task: Task;
+  task: TaskData;
   left: number;
   width: number;
   taskIndex: number;
@@ -27,8 +28,8 @@ const TimelineTaskCard = ({
       key={task.id}
       className={cn(
         'absolute top-0 h-[38px] flex items-center px-2 rounded-r-md border-l-[6px] border-r-2 cursor-pointer hover:opacity-80 transition-opacity',
-        TASK_STATUS_STYLES[task.status].bgColor,
-        TASK_STATUS_STYLES[task.status].borderColor
+        TASK_STATUS_STYLES[task.status as TaskStatus].bgColor,
+        TASK_STATUS_STYLES[task.status as TaskStatus].borderColor
       )}
       style={{
         left: `${left}px`,
@@ -37,10 +38,18 @@ const TimelineTaskCard = ({
       }}
       onClick={handleClick}
     >
-      <div className="flex relative justify-between items-center w-full">
-        <span className="text-text-T3 text-neutral-800">{task.name}</span>
-        <span className="text-text-caption text-neutral-900">
-          {task.progress}
+      <div
+        className={`flex relative items-center w-full ${width < 120 ? 'justify-end' : 'justify-between'}`}
+      >
+        <span
+          className={`truncate text-text-T3 text-neutral-800 text-ellipsis ${width < 120 ? 'hidden' : ''}`}
+        >
+          {task.title}
+        </span>
+        <span
+          className={`w-6 whitespace-nowrap text-text-caption ${task.status === 'DELAYED' ? 'text-red-500' : 'text-neutral-900'}`}
+        >
+          {task.completedTodoCount} / {task.pendingTodoCount}
         </span>
       </div>
 
