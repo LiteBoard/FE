@@ -3,6 +3,8 @@ import { DashboardSummary } from '@LiteBoard/ui';
 import { TaskList } from './TaskList';
 import { LoadingState, ErrorState, EmptyState } from '../states/';
 import { MyTasksResponse } from '@/types/project';
+import { useUserStore } from '@/lib/store/user';
+
 
 interface MyWorkViewProps {
   selectedProjectId: string | number | null;
@@ -12,19 +14,15 @@ interface MyWorkViewProps {
 }
 
 export const MyWorkView: React.FC<MyWorkViewProps> = ({
-  selectedProjectId,
   data,
   isLoading,
   error,
 }) => {
+  const { user } = useUserStore();
 
-  // 프로젝트가 선택되지 않았거나 로딩 중일 때
-  if (!selectedProjectId || isLoading) {
-    return (
-      <div className="h-full overflow-y-auto">
-        <LoadingState />
-      </div>
-    );
+  if (isLoading) {
+    return <LoadingState />;
+
   }
 
   if (error) {

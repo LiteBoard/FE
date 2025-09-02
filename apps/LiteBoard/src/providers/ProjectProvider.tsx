@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useProjectList } from '@/hooks/queries';
 
+
 interface ProjectContextType {
   selectedProjectId: number | null;
   setSelectedProjectId: (projectId: number | null) => void;
@@ -27,9 +28,10 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const { data: projects } = useProjectList();
 
-  const selectedProjectName = selectedProjectId 
-    ? projects?.find(project => project.id === selectedProjectId)?.title || null
-    : null;
+  const selectedProjectName = selectedProjectId
+    ? projects?.find((project) => project.id === selectedProjectId)?.title ||
+      null
+    : 'New Project NN';
 
   useEffect(() => {
     if (projects && projects.length > 0 && selectedProjectId === null) {
@@ -38,8 +40,10 @@ export const ProjectProvider = ({ children }: ProjectProviderProps) => {
   }, [projects, selectedProjectId]);
 
   return (
-    <ProjectContext.Provider value={{ selectedProjectId, setSelectedProjectId, selectedProjectName }}>
+    <ProjectContext.Provider
+      value={{ selectedProjectId, setSelectedProjectId, selectedProjectName }}
+    >
       {children}
     </ProjectContext.Provider>
   );
-}; 
+};

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useLayoutEffect } from 'react';
 import TimelineMonth from '../../atoms/timeline/timline-month';
 import TimelineDay from '../../atoms/timeline/timeline-day';
 import TimelineGridPannel from './timeline-grid-pannel';
@@ -11,6 +11,10 @@ interface TimelineBoardProps {
   onScroll?: (scrollLeft: number, containerWidth: number) => void;
   getInitialScrollPosition: () => number;
   getScrollAdjustment: () => number;
+  ensureDateRangeForScroll: (
+    targetScrollLeft: number,
+    containerWidth: number
+  ) => Promise<void>;
 }
 
 const TimelineBoard = ({
@@ -19,43 +23,103 @@ const TimelineBoard = ({
   onScroll,
   getInitialScrollPosition,
   getScrollAdjustment,
+  ensureDateRangeForScroll,
 }: TimelineBoardProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null); // 타임라인 보드 DOM 객체
   const isInitialRenderRef = useRef<boolean>(true); // 최초 렌더링 여부 플래그
   const previousDaysLengthRef = useRef<number>(0);
   const lastScrollLeftRef = useRef<number>(0);
-  const setScrollContainer = useTimelineScrollStore(
-    (s) => s.setScrollContainer
+
+  const setScrollPosition = useTimelineScrollStore(
+    (state) => state.setScrollPosition
   );
   const setGetInitialScrollPosition = useTimelineScrollStore(
-    (s) => s.setGetInitialScrollPosition
+    (state) => state.setGetInitialScrollPosition
   );
+  const setEnsureDateRangeForScroll = useTimelineScrollStore(
+    (state) => state.setEnsureDateRangeForScroll
+  );
+  const setOnScrollBy = useTimelineScrollStore((state) => state.setOnScrollBy);
+  const setOnScrollTo = useTimelineScrollStore((state) => state.setOnScrollTo);
 
-  // 최초 렌더링 시 스크롤 위치 초기화
   useEffect(() => {
     if (scrollContainerRef.current && isInitialRenderRef.current) {
       const initialScrollPosition = getInitialScrollPosition();
+
       scrollContainerRef.current.scrollLeft = initialScrollPosition;
       lastScrollLeftRef.current = initialScrollPosition;
       isInitialRenderRef.current = false;
     }
   }, [getInitialScrollPosition]);
 
-  // 타임라인 보드 DOM 전역 스토어에 저장
   useEffect(() => {
-    if (scrollContainerRef.current) {
-      setScrollContainer(scrollContainerRef.current);
-      return () => setScrollContainer(null);
+    const updateScrollPosition = () => {
+      if (scrollContainerRef.current) {
+        setScrollPosition({
+          scrollLeft: scrollContainerRef.current.scrollLeft,
+          containerWidth: scrollContainerRef.current.clientWidth,
+        });
+      }
+    };
+
+    updateScrollPosition();
+
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', updateScrollPosition);
+      window.addEventListener('resize', updateScrollPosition);
+
+      return () => {
+        scrollContainer.removeEventListener('scroll', updateScrollPosition);
+        window.removeEventListener('resize', updateScrollPosition);
+        setScrollPosition(null);
+      };
     }
-  }, [setScrollContainer]);
+  }, [setScrollPosition]);
 
   // 전역 스토어에 초기 스크롤 위치 저장
   useEffect(() => {
     setGetInitialScrollPosition(getInitialScrollPosition);
+
     return () => setGetInitialScrollPosition(null);
   }, [getInitialScrollPosition, setGetInitialScrollPosition]);
 
+  // 전역 스토어에 날짜 범위 보장 함수 저장
   useEffect(() => {
+    setEnsureDateRangeForScroll(ensureDateRangeForScroll);
+
+    return () => setEnsureDateRangeForScroll(null);
+  }, [ensureDateRangeForScroll, setEnsureDateRangeForScroll]);
+
+  useEffect(() => {
+    const handleScrollBy = (scrollPosition: number) => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollBy({
+          left: scrollPosition,
+          behavior: 'smooth',
+        });
+      }
+    };
+
+    const handleScrollTo = (leftPx: number) => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTo({
+          left: leftPx,
+          behavior: 'smooth',
+        });
+      }
+    };
+
+    setOnScrollBy(handleScrollBy);
+    setOnScrollTo(handleScrollTo);
+
+    return () => {
+      setOnScrollBy(null);
+      setOnScrollTo(null);
+    };
+  }, [setOnScrollBy, setOnScrollTo]);
+
+  useLayoutEffect(() => {
     const currentDaysLength = days.length;
     const previousDaysLength = previousDaysLengthRef.current;
 
@@ -68,12 +132,8 @@ const TimelineBoard = ({
       if (adjustment > 0) {
         const newScrollLeft = lastScrollLeftRef.current + adjustment;
 
-        setTimeout(() => {
-          if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollLeft = newScrollLeft;
-            lastScrollLeftRef.current = newScrollLeft;
-          }
-        }, 0);
+        scrollContainerRef.current.scrollLeft = newScrollLeft;
+        lastScrollLeftRef.current = newScrollLeft;
       }
     }
 

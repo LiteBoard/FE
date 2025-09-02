@@ -9,6 +9,18 @@ const AddTask = () => {
   const scrollBy = useTimelineScrollStore((s) => s.scrollBy);
   const scrollToToday = useTimelineScrollStore((s) => s.scrollToToday);
 
+  const handleScrollLeft = async () => {
+    await scrollBy(-800);
+  };
+
+  const handleScrollRight = async () => {
+    await scrollBy(800);
+  };
+
+  const handleScrollToToday = async () => {
+    await scrollToToday();
+  };
+
   return (
     <div className="flex justify-between items-center mr-7 ml-11">
       <Button
@@ -25,7 +37,7 @@ const AddTask = () => {
           variant={'outline'}
           className="px-2 w-10 h-9"
           radius={'roundCorner'}
-          onClick={() => scrollBy(-800)}
+          onClick={handleScrollLeft}
         >
           <ChevronIcon type="left" size={24} />
         </Button>
@@ -33,7 +45,7 @@ const AddTask = () => {
           variant={'outline'}
           className="px-3 w-[52px] h-9 text-text-T2"
           radius={'roundCorner'}
-          onClick={scrollToToday}
+          onClick={handleScrollToToday}
         >
           오늘
         </Button>
@@ -41,7 +53,7 @@ const AddTask = () => {
           variant={'outline'}
           className="px-2 w-10 h-9"
           radius={'roundCorner'}
-          onClick={() => scrollBy(800)}
+          onClick={handleScrollRight}
         >
           <ChevronIcon type="right" />
         </Button>
