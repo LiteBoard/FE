@@ -1,4 +1,4 @@
-import { Profile } from '@LiteBoard/ui';
+import { Profile, UserIcon } from '@LiteBoard/ui';
 import { truncateText } from '@/utils/truncateText';
 import {
   CATEGORY_TASK_STATUS_STYLES,
@@ -6,16 +6,22 @@ import {
 } from '../../consts/categoryTaskColorMap';
 import { cn } from '@/utils/cn';
 import { transformTaskStatus } from '../../hooks/transformTaskStatus';
+import { Member } from '@/types/common';
 
 interface CategoryTaskCardProps {
-  description: string;
+  title: string;
   status: TaskStatus;
+  members: Member[] | null;
 }
 
-const CategoryTaskCard = ({ description, status }: CategoryTaskCardProps) => {
+const CategoryTaskCard = ({
+  title,
+  status,
+  members,
+}: CategoryTaskCardProps) => {
   return (
     <div className="flex justify-between items-center h-7">
-      <p>{truncateText(description, 9)}</p>
+      <p>{truncateText(title, 9)}</p>
       <div className="flex gap-2 justify-center items-center">
         <div
           className={cn(
@@ -26,7 +32,13 @@ const CategoryTaskCard = ({ description, status }: CategoryTaskCardProps) => {
         >
           {transformTaskStatus(status)}
         </div>
-        <Profile name="성태현" size="sm" />
+        {members ? (
+          <Profile name={members[0]?.nickname ?? ''} size="sm" />
+        ) : (
+          <div className="rounded-full w-7 h-7 border-[2px] border-neutral-300 border-dashed bg-neutral-50 flex items-center justify-center">
+            <UserIcon width={14} height={14} className="text-neutral-300" />
+          </div>
+        )}
       </div>
     </div>
   );

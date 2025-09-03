@@ -1,4 +1,4 @@
-import { Member } from '@/types/api';
+import { Member } from '@/types/common';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
