@@ -24,9 +24,9 @@ const TaskDetailContent = ({
   onTodoChanges,
 }: TaskDetailContentProps) => {
   return (
-    <div className="p-[40px] min-h-full">
-      <div className="grid grid-cols-2 gap-[40px] relative">
-        {/* Left Column */}
+    <div className="flex h-full">
+      {/* Left Column */}
+      <div className="flex-1 p-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-neutral-100">
         <div className="space-y-[16px]">
           <Assignee assignee={assignee} />
           <Schedule schedule={schedule} />
@@ -37,21 +37,21 @@ const TaskDetailContent = ({
             onTodoChanges={onTodoChanges}
           />
         </div>
+      </div>
 
-        {/* Vertical Divider */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-neutral-200 transform -translate-x-1/2" />
+      {/* Vertical Divider */}
+      <div className="w-px bg-neutral-200 flex-shrink-0" />
 
-        {/* Right Column */}
-        <div>
-          <RequestForm
-            receivedRequests={receivedRequests}
-            workRequest={workRequest}
-            taskId={taskId}
-          />
-        </div>
+      {/* Right Column*/}
+      <div className="flex-1 p-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-neutral-100">
+        <RequestForm
+          receivedRequests={receivedRequests}
+          workRequest={workRequest}
+          taskId={taskId}
+        />
       </div>
     </div>
   );
 };
 
-export default TaskDetailContent; 
+export default TaskDetailContent;
