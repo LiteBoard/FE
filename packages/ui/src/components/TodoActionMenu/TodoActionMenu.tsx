@@ -10,14 +10,14 @@ interface TodoActionMenuProps {
   className?: string;
 }
 
-const TodoActionMenu: React.FC<TodoActionMenuProps> = ({
+const TodoActionMenu = ({
   isVisible,
   onEdit,
   onDelete,
   isDeletePending = false,
   menuRef,
   className = '',
-}) => {
+}: TodoActionMenuProps) => {
   if (!isVisible) return null;
 
   return (

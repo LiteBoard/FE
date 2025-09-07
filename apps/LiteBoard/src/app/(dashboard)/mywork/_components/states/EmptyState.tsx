@@ -8,12 +8,12 @@ interface EmptyStateProps {
   className?: string;
 }
 
-export const EmptyState: React.FC<EmptyStateProps> = ({
+export const EmptyState = ({
   title = '데이터가 없습니다',
   description,
   icon = <HelpIcon width={48} height={48} className="text-neutral-400" />,
   className = '',
-}) => {
+}: EmptyStateProps) => {
   return (
     <div className={`relative px-11 ${className}`}>
       <div className="flex flex-col justify-center items-center p-8 text-gray-500">

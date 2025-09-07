@@ -7,11 +7,11 @@ interface ErrorStateProps {
   className?: string;
 }
 
-export const ErrorState: React.FC<ErrorStateProps> = ({
+export const ErrorState = ({
   title = '데이터 로딩 오류',
   message,
   className = '',
-}) => {
+}: ErrorStateProps) => {
   return (
     <div className={`relative px-11 ${className}`}>
       <div className="p-4 text-red-500 bg-red-50 rounded-lg">

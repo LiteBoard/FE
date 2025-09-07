@@ -11,14 +11,14 @@ interface ReceivedRequestCardProps {
   menuRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const ReceivedRequestCard: React.FC<ReceivedRequestCardProps> = ({
+const ReceivedRequestCard = ({
   requestCard,
   showMenuForRequestId,
   onDotsClick,
   onEditRequest,
   onDeleteRequest,
   menuRef,
-}) => {
+}: ReceivedRequestCardProps) => {
   return (
     <div className="bg-neutral-100 rounded-[20px] p-4 shadow-sm">
       {/* 헤더: 프로필, 이름, 시간, dots 아이콘 */}

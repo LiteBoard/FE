@@ -5,9 +5,9 @@ interface LoadingStateProps {
   className?: string;
 }
 
-export const LoadingState: React.FC<LoadingStateProps> = ({
+export const LoadingState = ({
   className = '',
-}) => {
+}: LoadingStateProps) => {
   return (
     <div className={`relative px-11 ${className}`}>
       {/* 대시보드 제목 스켈레톤 */}
