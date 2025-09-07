@@ -58,22 +58,26 @@ const TaskDetailPanel = () => {
   const panelData = transformTaskDataToPanelData(taskData);
 
   return (
-    <Panel isOpen={isOpen} onClose={handleClosePanel} height="fixed">
+    <Panel isOpen={isOpen} onClose={handleClosePanel} height="full">
       <div className="flex flex-col h-full">
-        <TaskHeader 
-          status={taskData.status}
-          title={taskData.title}
-        />
-        <TaskDetailContent 
-          assignee={panelData.assignee}
-          schedule={panelData.schedule}
-          progress={panelData.progress}
-          todos={panelData.todos}
-          receivedRequests={panelData.receivedRequests}
-          workRequest={panelData.workRequest}
-          taskId={taskId}
-          onTodoChanges={handleTodoChanges}
-        />
+        <div className="flex-shrink-0">
+          <TaskHeader 
+            status={taskData.status}
+            title={taskData.title}
+          />
+        </div>
+        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-neutral-100">
+          <TaskDetailContent 
+            assignee={panelData.assignee}
+            schedule={panelData.schedule}
+            progress={panelData.progress}
+            todos={panelData.todos}
+            receivedRequests={panelData.receivedRequests}
+            workRequest={panelData.workRequest}
+            taskId={taskId}
+            onTodoChanges={handleTodoChanges}
+          />
+        </div>
       </div>
     </Panel>
   );

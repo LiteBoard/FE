@@ -24,8 +24,8 @@ const TaskDetailContent = ({
   onTodoChanges,
 }: TaskDetailContentProps) => {
   return (
-    <div className="flex-1 p-[40px]">
-      <div className="grid grid-cols-2 gap-[40px]">
+    <div className="p-[40px] min-h-full">
+      <div className="grid grid-cols-2 gap-[40px] relative">
         {/* Left Column */}
         <div className="space-y-[16px]">
           <Assignee assignee={assignee} />
@@ -39,14 +39,16 @@ const TaskDetailContent = ({
         </div>
 
         {/* Vertical Divider */}
-        <div className="absolute left-1/2 top-[120px] bottom-0 w-px bg-neutral-200 transform -translate-x-1/2" />
+        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-neutral-200 transform -translate-x-1/2" />
 
         {/* Right Column */}
-                       <RequestForm
-                 receivedRequests={receivedRequests}
-                 workRequest={workRequest}
-                 taskId={taskId}
-               />
+        <div>
+          <RequestForm
+            receivedRequests={receivedRequests}
+            workRequest={workRequest}
+            taskId={taskId}
+          />
+        </div>
       </div>
     </div>
   );

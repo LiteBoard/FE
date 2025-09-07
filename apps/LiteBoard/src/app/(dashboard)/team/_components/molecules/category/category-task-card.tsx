@@ -7,20 +7,33 @@ import {
 import { cn } from '@/utils/cn';
 import { transformTaskStatus } from '../../hooks/transformTaskStatus';
 import { Member } from '@/types/common';
+import { useTaskDetailStore } from '../../stores/useTaskDetailStore';
+import { TaskData } from '@/types/category';
 
 interface CategoryTaskCardProps {
+  task: TaskData;
   title: string;
   status: TaskStatus;
   members: Member[] | null;
 }
 
 const CategoryTaskCard = ({
+  task,
   title,
   status,
   members,
 }: CategoryTaskCardProps) => {
+  const { openPanel } = useTaskDetailStore();
+
+  const handleClick = () => {
+    openPanel(task);
+  };
+
   return (
-    <div className="flex justify-between items-center h-7">
+    <div 
+      className="flex justify-between items-center h-7 cursor-pointer hover:bg-neutral-200 rounded-md px-2 -mx-2 transition-colors"
+      onClick={handleClick}
+    >
       <p>{truncateText(title, 9)}</p>
       <div className="flex gap-2 justify-center items-center">
         <div

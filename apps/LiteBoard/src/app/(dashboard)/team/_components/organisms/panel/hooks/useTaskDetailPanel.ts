@@ -4,14 +4,14 @@ import { useTaskById } from '@/hooks/queries/task/useTaskById';
 import { useToggleTodos } from '@/hooks/mutations/todo/useToggleTodos';
 
 export const useTaskDetailPanel = () => {
-  const { isOpen, closePanel } = useTaskDetailStore();
+  const { isOpen, selectedTask, closePanel } = useTaskDetailStore();
   const [todoChanges, setTodoChanges] = useState<Map<number, boolean>>(new Map());
 
-  // TODO: 실제 taskId를 store에서 가져오도록 수정
-  const taskId = 1;
+  // 선택된 태스크의 ID 사용
+  const taskId = selectedTask?.id;
   
-  const { data: taskData, isLoading, error } = useTaskById(taskId, {
-    enabled: isOpen
+  const { data: taskData, isLoading, error } = useTaskById(taskId!, {
+    enabled: isOpen && !!taskId
   });
   
   const toggleTodosMutation = useToggleTodos();
