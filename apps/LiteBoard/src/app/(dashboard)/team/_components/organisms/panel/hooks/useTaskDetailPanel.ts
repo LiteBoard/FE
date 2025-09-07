@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTaskDetailStore } from '../../../stores/useTaskDetailStore';
 import { useTaskById } from '@/hooks/queries/task/useTaskById';
 import { useToggleTodos } from '@/hooks/mutations/todo/useToggleTodos';
+import { transformTaskDataToPanelData } from '../utils/taskDataTransformer';
 
 export const useTaskDetailPanel = () => {
   const { isOpen, selectedTask, closePanel } = useTaskDetailStore();
@@ -15,6 +16,9 @@ export const useTaskDetailPanel = () => {
   });
   
   const toggleTodosMutation = useToggleTodos();
+
+  // API 데이터를 UI 데이터로 변환
+  const panelData = taskData ? transformTaskDataToPanelData(taskData) : null;
 
   const handleTodoChanges = (changes: Map<number, boolean>) => {
     setTodoChanges(changes);
@@ -39,6 +43,7 @@ export const useTaskDetailPanel = () => {
     isOpen,
     taskId,
     taskData,
+    panelData, 
     isLoading,
     error,
     todoChanges,
