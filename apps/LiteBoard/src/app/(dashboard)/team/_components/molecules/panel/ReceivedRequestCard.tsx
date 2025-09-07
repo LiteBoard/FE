@@ -1,6 +1,7 @@
 import React from 'react';
 import { Profile, Checkbox, TodoActionMenu, DotsThreeIcon, PlusIcon } from '@LiteBoard/ui';
 import { RequestCard } from '@/types/request';
+import { useAcceptRequestCardTodo } from '@/hooks/mutations/requestCard';
 
 interface ReceivedRequestCardProps {
   requestCard: RequestCard;
@@ -9,6 +10,7 @@ interface ReceivedRequestCardProps {
   onEditRequest: (requestId: number) => void;
   onDeleteRequest: (requestId: number) => void;
   menuRef: React.RefObject<HTMLDivElement | null>;
+  taskId?: number;
 }
 
 const ReceivedRequestCard = ({
@@ -18,7 +20,18 @@ const ReceivedRequestCard = ({
   onEditRequest,
   onDeleteRequest,
   menuRef,
+  taskId,
 }: ReceivedRequestCardProps) => {
+  const acceptTodoMutation = useAcceptRequestCardTodo(taskId);
+
+  const handleAcceptTodo = async (requestCardId: number, requestCardTodoId: number) => {
+    try {
+      await acceptTodoMutation.mutateAsync({ requestCardId, requestCardTodoId });
+    } catch (error) {
+      console.error('수락 실패', error);
+    }
+  };
+
   return (
     <div className="bg-neutral-100 rounded-[20px] p-4">
       {/* 헤더: 프로필, 이름, 시간, dots 아이콘 */}
@@ -73,8 +86,17 @@ const ReceivedRequestCard = ({
                   onChange={() => {}}
                 />
               </div>
-              <button className="p-1 hover:bg-neutral-200 rounded-md transition-colors">
-                <PlusIcon width={16} height={16} className="text-neutral-600" />
+              <button 
+                className="p-1 hover:bg-neutral-200 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => handleAcceptTodo(requestCard.id, todo.id)}
+                disabled={acceptTodoMutation.isPending}
+                title="요청받은 할 일 수락"
+              >
+                <PlusIcon 
+                  width={16} 
+                  height={16} 
+                  className={`text-neutral-600 ${acceptTodoMutation.isPending ? 'animate-pulse' : ''}`} 
+                />
               </button>
             </div>
           ))}
