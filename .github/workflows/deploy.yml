@@ -35,7 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint (CI mode - allow warnings)
-        run: pnpm lint --max-warnings 10
+        run: pnpm turbo run lint -- --max-warnings 10
 
       - name: Build @LiteBoard
         run: pnpm build:@LiteBoard
