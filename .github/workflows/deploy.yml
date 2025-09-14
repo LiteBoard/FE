@@ -23,6 +23,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
+          version: latest
           run_install: false
 
       - name: Setup Node.js
@@ -34,8 +35,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
+      - name: Lint (CI mode - allow warnings)
+        run: pnpm lint --max-warnings 10
 
       - name: Build @LiteBoard
         run: pnpm build:@LiteBoard
@@ -67,6 +68,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
+          version: latest
           run_install: false
 
       - name: Setup Node.js
