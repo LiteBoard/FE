@@ -7,8 +7,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@LiteBoard/fonts": "workspace:*"
   }
 }

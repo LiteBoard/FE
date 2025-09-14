@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack --port 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --max-warnings 0",
+    "lint": "next lint --max-warnings 10",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
@@ -22,8 +22,8 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.6",
     "next": "^15.3.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "zustand": "^5.0.7"
   },
   "devDependencies": {

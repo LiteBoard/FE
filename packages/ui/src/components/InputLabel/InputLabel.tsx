@@ -4,10 +4,17 @@ import React from 'react';
 interface InputLabelProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   required?: boolean;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
-export const InputLabel = React.forwardRef<HTMLInputElement, InputLabelProps>(
-  ({ className, type = 'text', label, required, ...props }, ref) => {
+export const InputLabel = ({ 
+  className, 
+  type = 'text', 
+  label, 
+  required, 
+  ref,
+  ...props 
+}: InputLabelProps) => {
     return (
       <div className="flex flex-col space-y-2">
         {label && (
@@ -33,7 +40,4 @@ export const InputLabel = React.forwardRef<HTMLInputElement, InputLabelProps>(
         />
       </div>
     );
-  }
-);
-
-InputLabel.displayName = 'InputLabel';
+};

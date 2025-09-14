@@ -2,10 +2,11 @@ import * as React from 'react';
 
 import { cn } from '../../lib/util';
 
-const TextField = React.forwardRef<
-  HTMLTextAreaElement,
-  React.ComponentProps<'textarea'>
->(({ className, ...props }, ref) => {
+interface TextFieldProps extends React.ComponentProps<'textarea'> {
+  ref?: React.Ref<HTMLTextAreaElement>;
+}
+
+const TextField = ({ className, ref, ...props }: TextFieldProps) => {
   return (
     <textarea
       className={cn(
@@ -16,7 +17,6 @@ const TextField = React.forwardRef<
       {...props}
     />
   );
-});
-TextField.displayName = 'TextField';
+};
 
 export { TextField };

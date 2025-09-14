@@ -1,4 +1,4 @@
-const { fontFamily } = require('@LiteBoard/fonts');
+
 
 const colors = {
   neutral: {
@@ -70,8 +70,8 @@ module.exports = {
     extend: {
       colors,
       fontFamily: {
-        pretendard: [fontFamily.pretendard],
-        sans: [fontFamily.pretendard],
+        pretendard: ["Pretendard", "sans-serif"],
+        sans: ["Pretendard", "sans-serif"],
       },
       fontSize: {
         'text-H1': [

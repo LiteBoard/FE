@@ -4,7 +4,6 @@ import { TaskList } from './TaskList';
 import { LoadingState, ErrorState, EmptyState } from '../states/';
 import { MyTasksResponse } from '@/types/project';
 
-
 interface MyWorkViewProps {
   selectedProjectId: string | number | null;
   data: MyTasksResponse | undefined;
@@ -12,15 +11,13 @@ interface MyWorkViewProps {
   error: Error | null;
 }
 
-export const MyWorkView: React.FC<MyWorkViewProps> = ({
+export const MyWorkView = ({
   data,
   isLoading,
   error,
-}) => {
-
+}: MyWorkViewProps) => {
   if (isLoading) {
     return <LoadingState />;
-
   }
 
   if (error) {

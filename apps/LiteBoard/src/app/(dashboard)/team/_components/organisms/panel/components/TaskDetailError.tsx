@@ -8,12 +8,12 @@ interface TaskDetailErrorProps {
   error?: Error;
 }
 
-const TaskDetailError: React.FC<TaskDetailErrorProps> = ({
+const TaskDetailError = ({
   isOpen,
   onClose,
   type,
   error,
-}) => {
+}: TaskDetailErrorProps) => {
   const getErrorContent = () => {
     switch (type) {
       case 'loading':
