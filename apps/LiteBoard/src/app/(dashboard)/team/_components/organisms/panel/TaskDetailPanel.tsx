@@ -86,24 +86,24 @@ const TaskDetailPanel = () => {
     <Panel isOpen={isOpen} onClose={handleClosePanel} height="full">
       <div className="flex flex-col h-full">
         <div className="flex-shrink-0">
-          <TaskHeader
-            status={taskData.status}
-            title={taskData.title}
+        <TaskHeader 
+          status={taskData.status}
+          title={taskData.title}
             taskId={taskId!}
             onDeleteSuccess={handleDeleteSuccess}
-          />
+        />
         </div>
         <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-neutral-100">
-          <TaskDetailContent
+        <TaskDetailContent 
             assignee={currentPanelData.assignee}
             schedule={currentPanelData.schedule}
             progress={currentPanelData.progress}
             todos={currentPanelData.todos}
             receivedRequests={currentPanelData.receivedRequests}
             workRequest={currentPanelData.workRequest}
-            taskId={taskId}
-            onTodoChanges={handleTodoChanges}
-          />
+          taskId={taskId}
+          onTodoChanges={handleTodoChanges}
+        />
         </div>
       </div>
     </Panel>
