@@ -44,7 +44,7 @@ const TaskDetailContent = ({
       {/* Left Column */}
       <div className="flex-1 p-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-neutral-100">
         <div className="space-y-[16px]">
-          <Assignee assignee={assignee} projectId={projectId} />
+          <Assignee assignee={assignee} projectId={projectId} taskId={taskId} />
           {/* Schedule with DateRangePicker */}
           <div className="flex items-center gap-[78px] flex-nowrap">
             <span className="text-text-B3M text-neutral-700 flex-shrink-0">일정</span>

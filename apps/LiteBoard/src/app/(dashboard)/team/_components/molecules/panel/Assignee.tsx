@@ -1,20 +1,28 @@
 import React, { useState, useRef } from 'react';
-import { Profile, Button, XBoldIcon, ChevronIcon } from '@LiteBoard/ui';
+import { Profile } from '@LiteBoard/ui';
 import { Assignee as AssigneeType } from '../../types/panel';
 import { useProjectMembers } from '@/hooks/queries/project/useProjectMembers';
 import { useClickOutside } from '@/hooks/utils/useClickOutSide';
+import { ProjectMember } from '@/types/member';
+import { useAssignTaskMembers } from '@/hooks/mutations/task/useAssignTaskMembers';
+import { useRemoveTaskMember } from '@/hooks/mutations/task/useRemoveTaskMember';
 
 interface AssigneeProps {
   assignee: AssigneeType;
   projectId?: number;
+  taskId?: number;
 }
 
-const Assignee = ({ assignee, projectId }: AssigneeProps) => {
+const Assignee = ({ assignee, projectId, taskId }: AssigneeProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // 프로젝트 멤버 조회
   const { data: projectMembers, isLoading, error } = useProjectMembers(projectId || 0);
+
+  // 담당자 배정/제거 훅
+  const assignTaskMembersMutation = useAssignTaskMembers();
+  const removeTaskMemberMutation = useRemoveTaskMember();
 
   // 드롭다운 외부 클릭 시 닫기
   useClickOutside(dropdownRef, () => {
@@ -27,10 +35,46 @@ const Assignee = ({ assignee, projectId }: AssigneeProps) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleMemberSelect = (member: any) => {
-    console.log('선택된 멤버:', member);
-    setIsDropdownOpen(false);
-    // TODO: 담당자 변경 API 호출
+  const handleMemberSelect = async (member: ProjectMember) => {
+    if (!taskId) {
+      console.error('Task ID가 필요합니다');
+      return;
+    }
+
+    try {
+      console.log('선택된 멤버:', member);
+
+      // 현재 담당자 ID 배열 생성
+      const currentAssigneeIds = Array.isArray(assignee)
+        ? assignee.map(a => a.id)
+        : [assignee.id];
+
+      // 이미 담당자인지 확인
+      if (currentAssigneeIds.includes(member.id)) {
+        // 담당자 제거
+        console.log('담당자 제거:', member.nickname);
+        await removeTaskMemberMutation.mutateAsync({
+          taskId,
+          memberId: member.id
+        });
+        console.log('담당자 제거 완료:', member.nickname);
+      } else {
+        // 새로운 담당자 추가
+        console.log('담당자 추가:', member.nickname);
+        const newMemberIds = [...currentAssigneeIds, member.id];
+
+        await assignTaskMembersMutation.mutateAsync({
+          taskId,
+          memberIds: newMemberIds
+        });
+        console.log('담당자 배정 완료:', member.nickname);
+      }
+
+      // 드롭다운을 닫지 않고 유지
+      // setIsDropdownOpen(false); // 제거
+    } catch (error) {
+      console.error('담당자 변경 실패:', error);
+    }
   };
 
   return (
@@ -43,14 +87,6 @@ const Assignee = ({ assignee, projectId }: AssigneeProps) => {
         >
           <Profile name={assignee.nickname.charAt(0)} size="lg" variant="skyBlue" />
           <span className="text-text-B1M text-neutral-800">{assignee.nickname}</span>
-          <ChevronIcon
-            width={16}
-            height={16}
-            className={`text-neutral-600 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
-          />
-          <Button variant="borderless" size="md" onClick={(e) => e.stopPropagation()}>
-            <XBoldIcon width={16} height={16} />
-          </Button>
         </div>
 
         {/* 드롭다운 메뉴 */}
@@ -64,27 +100,42 @@ const Assignee = ({ assignee, projectId }: AssigneeProps) => {
               <div className="p-3 text-center text-red-500">에러: {error.message}</div>
             ) : projectMembers && projectMembers.length > 0 ? (
               <div className="py-2">
-                {projectMembers.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center gap-3 px-3 py-2 hover:bg-neutral-50 cursor-pointer"
-                    onClick={() => handleMemberSelect(member)}
-                  >
-                    <Profile
-                      name={member.nickname.charAt(0)}
-                      size="md"
-                      variant="blue"
-                    />
-                    <div className="flex-1">
-                      <div className="text-sm font-medium text-neutral-800">
-                        {member.nickname}
-                      </div>
-                      <div className="text-xs text-neutral-500">
-                        {member.email}
+                {projectMembers.map((member) => {
+                  const currentAssigneeIds = Array.isArray(assignee)
+                    ? assignee.map(a => a.id)
+                    : [assignee.id];
+                  const isAssigned = currentAssigneeIds.includes(member.id);
+
+                  return (
+                    <div
+                      key={member.id}
+                      className={`flex items-center gap-3 px-3 py-2 cursor-pointer ${
+                        isAssigned
+                          ? 'bg-blue-50 hover:bg-blue-100'
+                          : 'hover:bg-neutral-50'
+                      }`}
+                      onClick={() => handleMemberSelect(member)}
+                    >
+                      <Profile
+                        name={member.nickname.charAt(0)}
+                        size="md"
+                        variant="blue"
+                      />
+                      <div className="flex-1">
+                        <div className={`text-sm font-medium ${
+                          isAssigned ? 'text-blue-800' : 'text-neutral-800'
+                        }`}>
+                          {member.nickname}
+                        </div>
+                        <div className={`text-xs ${
+                          isAssigned ? 'text-blue-600' : 'text-neutral-500'
+                        }`}>
+                          {member.email}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="p-3 text-center text-neutral-500">
