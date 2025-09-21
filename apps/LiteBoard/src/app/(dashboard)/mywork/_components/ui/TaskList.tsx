@@ -48,6 +48,20 @@ export function TaskList(): TaskListReturn {
     }
   }, [selectedProjectId, queryClient, user?.id]);
 
+  // Todo 편집 핸들러
+  const handleTodoEdit = useCallback(async (todoId: string, newText: string) => {
+    try {
+      await todoService.update(parseInt(todoId), {
+        description: newText
+      });
+      // 캐시 무효화로 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ['my-tasks', selectedProjectId] });
+    } catch (error) {
+      console.error('Todo 편집 실패:', error);
+      throw error;
+    }
+  }, [selectedProjectId, queryClient]);
+
   // Todo 삭제 핸들러
   const handleTodoDelete = useCallback(async (todoId: string) => {
     try {
@@ -104,6 +118,7 @@ export function TaskList(): TaskListReturn {
             taskId={taskId}
             onTodoChange={handleTodoChange}
             onTodoAdd={(text) => handleTodoAdd(taskId, text)}
+            onTodoEdit={handleTodoEdit}
             onTodoDelete={handleTodoDelete}
           />
         );
