@@ -11,6 +11,7 @@ const TaskDetailPanel = () => {
   const {
     isOpen,
     taskId,
+    projectId,
     taskData,
     panelData,
     isLoading,
@@ -94,7 +95,7 @@ const TaskDetailPanel = () => {
         />
         </div>
         <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-neutral-100">
-        <TaskDetailContent 
+        <TaskDetailContent
             assignee={currentPanelData.assignee}
             schedule={currentPanelData.schedule}
             progress={currentPanelData.progress}
@@ -102,6 +103,7 @@ const TaskDetailPanel = () => {
             receivedRequests={currentPanelData.receivedRequests}
             workRequest={currentPanelData.workRequest}
           taskId={taskId}
+          projectId={projectId}
           onTodoChanges={handleTodoChanges}
         />
         </div>

@@ -3,9 +3,11 @@ import { useTaskDetailStore } from '../../../stores/useTaskDetailStore';
 import { useTaskById } from '@/hooks/queries/task/useTaskById';
 import { useToggleTodos } from '@/hooks/mutations/todo/useToggleTodos';
 import { transformTaskDataToPanelData } from '../utils/taskDataTransformer';
+import { useProjectContext } from '@/providers/ProjectProvider';
 
 export const useTaskDetailPanel = () => {
   const { isOpen, selectedTask, closePanel } = useTaskDetailStore();
+  const { selectedProjectId } = useProjectContext();
   const [todoChanges, setTodoChanges] = useState<Map<number, boolean>>(new Map());
 
   // 선택된 태스크의 ID 사용
@@ -42,8 +44,9 @@ export const useTaskDetailPanel = () => {
   return {
     isOpen,
     taskId,
+    projectId: selectedProjectId,
     taskData,
-    panelData, 
+    panelData,
     isLoading,
     error,
     todoChanges,
