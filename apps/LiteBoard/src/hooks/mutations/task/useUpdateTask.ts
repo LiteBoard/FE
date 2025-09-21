@@ -12,9 +12,7 @@ export const useUpdateTask = () => {
   return useMutation({
     mutationFn: ({ taskId, taskData }: { taskId: number; taskData: UpdateTaskRequest }) =>
       taskService.update(taskId, taskData),
-    onSuccess: (updatedTask, { taskId }) => {
-      console.log('🔍 useUpdateTask onSuccess - updatedTask:', updatedTask);
-
+    onSuccess: ( _, { taskId }) => {
       queryClient.invalidateQueries({ queryKey: ['tasks', 'detail', taskId] });
 
       queryClient.invalidateQueries({ queryKey: ['tasks', 'list'] });

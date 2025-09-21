@@ -60,8 +60,15 @@ const TaskDetailContent = ({
 
     // store의 currentTaskData 업데이트
     if (range?.from) {
-      const startDate = range.from.toISOString().split('T')[0]; // YYYY-MM-DD 형식
-      const endDate = range.to ? range.to.toISOString().split('T')[0] : startDate;
+      const formatLocalDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+
+      const startDate = formatLocalDate(range.from);
+      const endDate = range.to ? formatLocalDate(range.to) : startDate;
 
       updateCurrentData({
         startDate,
