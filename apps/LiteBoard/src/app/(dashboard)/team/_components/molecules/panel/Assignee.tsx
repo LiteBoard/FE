@@ -41,36 +41,24 @@ const Assignee = ({ assignee, projectId, taskId }: AssigneeProps) => {
     }
 
     try {
-      console.log('선택된 멤버:', member);
 
-      // 현재 담당자 ID 배열 생성
       const currentAssigneeIds = Array.isArray(assignee)
         ? assignee.map(a => a.id)
         : [assignee.id];
 
-      // 이미 담당자인지 확인
       if (currentAssigneeIds.includes(member.id)) {
-        // 담당자 제거
-        console.log('담당자 제거:', member.nickname);
         await removeTaskMemberMutation.mutateAsync({
           taskId,
           memberId: member.id
         });
-        console.log('담당자 제거 완료:', member.nickname);
       } else {
-        // 새로운 담당자 추가
-        console.log('담당자 추가:', member.nickname);
         const newMemberIds = [...currentAssigneeIds, member.id];
 
         await assignTaskMembersMutation.mutateAsync({
           taskId,
           memberIds: newMemberIds
         });
-        console.log('담당자 배정 완료:', member.nickname);
       }
-
-      // 드롭다운을 닫지 않고 유지
-      // setIsDropdownOpen(false); // 제거
     } catch (error) {
       console.error('담당자 변경 실패:', error);
     }

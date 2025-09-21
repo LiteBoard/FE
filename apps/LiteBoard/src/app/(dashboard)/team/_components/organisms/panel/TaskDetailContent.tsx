@@ -74,8 +74,6 @@ const TaskDetailContent = ({
         startDate,
         endDate
       });
-
-      console.log('날짜 변경:', { startDate, endDate });
     }
   };
 

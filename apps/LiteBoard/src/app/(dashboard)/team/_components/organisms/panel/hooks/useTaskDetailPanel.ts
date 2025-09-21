@@ -56,8 +56,6 @@ export const useTaskDetailPanel = () => {
       taskId,
       taskData: updateRequest
     });
-
-    console.log('태스크 업데이트 완료:', updateRequest);
   };
 
   const handleClosePanel = async () => {
@@ -65,7 +63,6 @@ export const useTaskDetailPanel = () => {
       try {
         const todoIds = Array.from(todoChanges.keys());
         await toggleTodosMutation.mutateAsync(todoIds);
-        console.log('투두 변경사항 저장 완료:', todoIds);
       } catch (error) {
         console.error('투두 변경사항 저장 실패:', error);
       }

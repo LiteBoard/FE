@@ -22,14 +22,11 @@ const TaskDeleteButton = ({ taskId, onDeleteSuccess }: TaskDeleteButtonProps) =>
   const handleDeleteConfirm = async () => {
     try {
       await deleteTaskMutation.mutateAsync(taskId);
-      console.log('업무 삭제 완료:', taskId);
       
-      // 삭제 성공 시 콜백 실행 (패널 닫기 등)
       if (onDeleteSuccess) {
         onDeleteSuccess();
       }
       
-      // 모달 닫기
       setIsModalOpen(false);
     } catch (error) {
       console.error('업무 삭제 실패:', error);

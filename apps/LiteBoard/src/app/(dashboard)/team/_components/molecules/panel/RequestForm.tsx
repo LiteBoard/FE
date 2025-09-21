@@ -72,9 +72,7 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
 
     try {
       await createRequestCardMutation.mutateAsync({ taskId, requestData });
-      console.log('업무 요청 생성 완료');
       
-      // 폼 초기화
       setRequestContent('');
       setTodos([]);
     } catch (error) {
@@ -98,7 +96,6 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
   const handleDeleteRequest = async (requestId: number) => {
     try {
       await deleteRequestCardMutation.mutateAsync(requestId);
-      console.log('업무 요청 삭제 완료:', requestId);
     } catch (error) {
       console.error('업무 요청 삭제 실패:', error);
     } finally {
