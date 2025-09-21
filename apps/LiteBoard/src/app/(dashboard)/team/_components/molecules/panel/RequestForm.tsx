@@ -20,6 +20,7 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
   const [isAddingTodo, setIsAddingTodo] = useState(false);
   const [requestContent, setRequestContent] = useState('');
   const [showMenuForRequestId, setShowMenuForRequestId] = useState<number | null>(null);
+  const [editingRequestId, setEditingRequestId] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const createRequestCardMutation = useCreateRequestCard();
   const deleteRequestCardMutation = useDeleteRequestCard();
@@ -87,8 +88,12 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
   };
 
   const handleEditRequest = (requestId: number) => {
-    console.log('편집 요청:', requestId);
+    setEditingRequestId(requestId);
     setShowMenuForRequestId(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingRequestId(null);
   };
 
   const handleDeleteRequest = async (requestId: number) => {
@@ -121,9 +126,11 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
                 onDotsClick={handleDotsClick}
                 onEditRequest={handleEditRequest}
                 onDeleteRequest={handleDeleteRequest}
+                onCancelEdit={handleCancelEdit}
                 menuRef={menuRef}
                 taskId={taskId}
                 isDeletePending={deleteRequestCardMutation.isPending}
+                isEditing={editingRequestId === requestCard.id}
               />
             ))
           ) : (
