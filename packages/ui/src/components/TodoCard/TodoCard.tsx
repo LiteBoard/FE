@@ -17,6 +17,10 @@ export interface TodoCardProps {
   status: Status;
   title: string;
   todos: Todo[];
+  onTodoChange?: (todoId: string) => void;
+  onTodoAdd?: (text: string) => Promise<void>;
+  onTodoDelete?: (todoId: string) => void;
+  taskId?: string;
 }
 
 const statusChip = {
@@ -32,6 +36,10 @@ export const TodoCard = ({
   status,
   title,
   todos: initialTodos,
+  onTodoChange,
+  onTodoAdd,
+  onTodoDelete,
+  taskId,
 }: TodoCardProps) => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [isClient, setIsClient] = useState(false);
@@ -44,16 +52,27 @@ export const TodoCard = ({
     setIsClient(true);
   }, []);
 
+  // props로 받은 todos가 변경되면 로컬 상태 업데이트
+  useEffect(() => {
+    setTodos(initialTodos);
+  }, [initialTodos]);
+
   // 투두 체크 상태 변경 핸들러
   const handleTodoChange = useCallback((todoId: string, checked: boolean) => {
     if (!isClient) return;
-    
+
+    // API 콜백이 있으면 호출
+    if (onTodoChange) {
+      onTodoChange(todoId);
+    }
+
+    // 로컬 상태 업데이트
     setTodos(prevTodos => {
       return prevTodos.map(todo =>
         todo.id === todoId ? { ...todo, checked } : todo
       );
     });
-  }, [isClient]);
+  }, [isClient, onTodoChange]);
 
   // 새 투두 추가 핸들러
   const handleAddTodo = useCallback(() => {
@@ -61,25 +80,35 @@ export const TodoCard = ({
   }, []);
 
   // 새 투두 저장 핸들러
-  const handleSaveTodo = useCallback(() => {
+  const handleSaveTodo = useCallback(async () => {
     if (!newTodoText.trim()) {
       setIsAddingTodo(false);
       setNewTodoText('');
       return;
     }
 
-    const newTodo: Todo = {
-      id: Date.now().toString(),
-      text: newTodoText.trim(),
-      checked: false,
-      assignee: '나',
-      requested: false,
-    };
+    try {
+      // API 콜백이 있으면 호출
+      if (onTodoAdd) {
+        await onTodoAdd(newTodoText.trim());
+      } else {
+        // 기본 동작: 로컬 상태만 업데이트
+        const newTodo: Todo = {
+          id: Date.now().toString(),
+          text: newTodoText.trim(),
+          checked: false,
+          assignee: '나',
+          requested: false,
+        };
+        setTodos(prevTodos => [...prevTodos, newTodo]);
+      }
 
-    setTodos(prevTodos => [...prevTodos, newTodo]);
-    setNewTodoText('');
-    setIsAddingTodo(false);
-  }, [newTodoText]);
+      setNewTodoText('');
+      setIsAddingTodo(false);
+    } catch (error) {
+      console.error('Todo 추가 실패:', error);
+    }
+  }, [newTodoText, onTodoAdd]);
 
   // 새 투두 취소 핸들러
   const handleCancelTodo = useCallback(() => {
