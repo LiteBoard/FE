@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Profile, Checkbox, TodoActionMenu, DotsThreeIcon, PlusIcon, TextField, Button } from '@LiteBoard/ui';
 import { RequestCard } from '@/types/request';
-import { useAcceptRequestCardTodo } from '@/hooks/mutations/requestCard';
-import { useUpdateRequestCard } from '@/hooks/mutations/requestCard/useUpdateRequestCard';
+import { useAcceptRequestCardTodo, useUpdateRequestCard } from '@/hooks/mutations/requestCard';
 import { useClickOutside } from '@/hooks/utils/useClickOutSide';
 
 interface ReceivedRequestCardProps {

@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { TextField, Checkbox, Button, PlusIcon, HelpIcon } from '@LiteBoard/ui';
 import { ReceivedRequest, WorkRequest } from '../../types/panel';
-import { useCreateRequestCard } from '@/hooks/mutations/requestCard/useCreateRequestCard';
-import { useDeleteRequestCard } from '@/hooks/mutations/requestCard/useDeleteRequestCard';
+import { useCreateRequestCard, useDeleteRequestCard } from '@/hooks/mutations/requestCard';
 import { useRequestCardList } from '@/hooks/queries/requestCard/useRequestCardList';
 import { CreateRequestCardRequest } from '@/types/request';
 import { useClickOutside } from '@/hooks/utils/useClickOutSide';

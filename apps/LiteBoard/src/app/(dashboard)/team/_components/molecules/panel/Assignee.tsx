@@ -4,12 +4,11 @@ import { Assignee as AssigneeType } from '../../types/panel';
 import { useProjectMembers } from '@/hooks/queries/project/useProjectMembers';
 import { useClickOutside } from '@/hooks/utils/useClickOutSide';
 import { ProjectMember } from '@/types/member';
-import { useAssignTaskMembers } from '@/hooks/mutations/task/useAssignTaskMembers';
-import { useRemoveTaskMember } from '@/hooks/mutations/task/useRemoveTaskMember';
+import { useAssignTaskMembers, useRemoveTaskMember } from '@/hooks/mutations/task';
 
 interface AssigneeProps {
   assignee: AssigneeType;
-  projectId?: number;
+  projectId?: number | null;
   taskId?: number;
 }
 

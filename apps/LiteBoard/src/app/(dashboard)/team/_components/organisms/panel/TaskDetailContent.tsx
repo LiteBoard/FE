@@ -11,7 +11,7 @@ interface TaskDetailContentProps {
   receivedRequests: TaskDetailData['receivedRequests'];
   workRequest: TaskDetailData['workRequest'];
   taskId?: number; // 태스크 ID 추가
-  projectId?: number; // 프로젝트 ID 추가
+  projectId?: number | null; // 프로젝트 ID 추가
   onTodoChanges?: (changes: Map<number, boolean>) => void; // 투두 변경사항 핸들러
 }
 
