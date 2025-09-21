@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Assignee, TodoList, RequestForm } from '../../molecules/panel';
 import { TaskDetailData } from '../../types/panel';
 import { DateRangePicker, Button, XBoldIcon, CalendarIcon, type DateRange } from '@LiteBoard/ui';
+import { useTaskDetailStore } from '../../stores/useTaskDetailStore';
 
 interface TaskDetailContentProps {
   assignee: TaskDetailData['assignee'];
@@ -26,6 +27,8 @@ const TaskDetailContent = ({
   projectId,
   onTodoChanges,
 }: TaskDetailContentProps) => {
+  const { updateCurrentData } = useTaskDetailStore();
+
   const getInitialDateRange = useCallback((): DateRange | undefined => {
     if (schedule?.startDate && schedule?.endDate) {
       return {
@@ -54,7 +57,19 @@ const TaskDetailContent = ({
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setDateRange(range);
-    console.log('선택된 기간:', range);
+
+    // store의 currentTaskData 업데이트
+    if (range?.from) {
+      const startDate = range.from.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+      const endDate = range.to ? range.to.toISOString().split('T')[0] : startDate;
+
+      updateCurrentData({
+        startDate,
+        endDate
+      });
+
+      console.log('날짜 변경:', { startDate, endDate });
+    }
   };
 
   const handleClearDate = () => {
