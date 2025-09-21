@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { TextField, Checkbox, Button, PlusIcon, HelpIcon } from '@LiteBoard/ui';
 import { ReceivedRequest, WorkRequest } from '../../types/panel';
 import { useCreateRequestCard } from '@/hooks/mutations/requestCard/useCreateRequestCard';
+import { useDeleteRequestCard } from '@/hooks/mutations/requestCard/useDeleteRequestCard';
 import { useRequestCardList } from '@/hooks/queries/requestCard/useRequestCardList';
 import { CreateRequestCardRequest } from '@/types/request';
 import { useClickOutside } from '@/hooks/utils/useClickOutSide';
@@ -21,6 +22,7 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
   const [showMenuForRequestId, setShowMenuForRequestId] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const createRequestCardMutation = useCreateRequestCard();
+  const deleteRequestCardMutation = useDeleteRequestCard();
   
   // 업무 요청 목록 조회
   const { data: requestCards, isLoading: isLoadingRequestCards } = useRequestCardList(
@@ -89,9 +91,15 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
     setShowMenuForRequestId(null);
   };
 
-  const handleDeleteRequest = (requestId: number) => {
-    console.log('삭제 요청:', requestId);
-    setShowMenuForRequestId(null);
+  const handleDeleteRequest = async (requestId: number) => {
+    try {
+      await deleteRequestCardMutation.mutateAsync(requestId);
+      console.log('업무 요청 삭제 완료:', requestId);
+    } catch (error) {
+      console.error('업무 요청 삭제 실패:', error);
+    } finally {
+      setShowMenuForRequestId(null);
+    }
   };
 
   return (
@@ -115,6 +123,7 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
                 onDeleteRequest={handleDeleteRequest}
                 menuRef={menuRef}
                 taskId={taskId}
+                isDeletePending={deleteRequestCardMutation.isPending}
               />
             ))
           ) : (

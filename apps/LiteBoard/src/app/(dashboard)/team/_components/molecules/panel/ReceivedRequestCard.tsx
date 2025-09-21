@@ -11,6 +11,7 @@ interface ReceivedRequestCardProps {
   onDeleteRequest: (requestId: number) => void;
   menuRef: React.RefObject<HTMLDivElement | null>;
   taskId?: number;
+  isDeletePending?: boolean;
 }
 
 const ReceivedRequestCard = ({
@@ -21,6 +22,7 @@ const ReceivedRequestCard = ({
   onDeleteRequest,
   menuRef,
   taskId,
+  isDeletePending = false,
 }: ReceivedRequestCardProps) => {
   const acceptTodoMutation = useAcceptRequestCardTodo(taskId);
 
@@ -60,6 +62,7 @@ const ReceivedRequestCard = ({
             isVisible={showMenuForRequestId === requestCard.id}
             onEdit={() => onEditRequest(requestCard.id)}
             onDelete={() => onDeleteRequest(requestCard.id)}
+            isDeletePending={isDeletePending}
             menuRef={menuRef}
             className="top-8"
           />
