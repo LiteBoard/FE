@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Assignee, TodoList, RequestForm } from '../../molecules/panel';
 import { TaskDetailData } from '../../types/panel';
 import { DateRangePicker, Button, XBoldIcon, CalendarIcon, type DateRange } from '@LiteBoard/ui';
@@ -10,13 +10,14 @@ interface TaskDetailContentProps {
   todos: TaskDetailData['todos'];
   receivedRequests: TaskDetailData['receivedRequests'];
   workRequest: TaskDetailData['workRequest'];
-  taskId?: number; // 태스크 ID 추가
-  projectId?: number | null; // 프로젝트 ID 추가
-  onTodoChanges?: (changes: Map<number, boolean>) => void; // 투두 변경사항 핸들러
+  taskId?: number;
+  projectId?: number | null;
+  onTodoChanges?: (changes: Map<number, boolean>) => void;
 }
 
 const TaskDetailContent = ({
   assignee,
+  schedule,
   progress,
   todos,
   receivedRequests,
@@ -25,10 +26,31 @@ const TaskDetailContent = ({
   projectId,
   onTodoChanges,
 }: TaskDetailContentProps) => {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: undefined
-  });
+  const getInitialDateRange = useCallback((): DateRange | undefined => {
+    if (schedule?.startDate && schedule?.endDate) {
+      return {
+        from: new Date(schedule.startDate),
+        to: new Date(schedule.endDate)
+      };
+    }
+    if (schedule?.startDate) {
+      return {
+        from: new Date(schedule.startDate),
+        to: undefined
+      };
+    }
+    return {
+      from: new Date(),
+      to: undefined
+    };
+  }, [schedule?.startDate, schedule?.endDate]);
+
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(getInitialDateRange());
+
+  // schedule이 변경될 때마다 dateRange 업데이트
+  useEffect(() => {
+    setDateRange(getInitialDateRange());
+  }, [getInitialDateRange]);
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setDateRange(range);

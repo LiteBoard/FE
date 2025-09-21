@@ -12,8 +12,8 @@ export const transformTaskDataToPanelData = (task: TaskListResponse): TaskDetail
       profileUrl: '',
     },
     schedule: {
-      startDate: formatDate(task.startDate),
-      endDate: formatDate(task.endDate),
+      startDate: task.startDate,
+      endDate: task.endDate,
     },
     progress: {
       current: task.completedTodoCount,
@@ -34,12 +34,4 @@ export const transformTaskDataToPanelData = (task: TaskListResponse): TaskDetail
   };
 };
 
-/**
- * 날짜 포맷 함수
- */
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${month}월 ${day}일`;
-}; 
+ 
