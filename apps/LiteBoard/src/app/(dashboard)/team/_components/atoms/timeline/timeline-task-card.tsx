@@ -20,7 +20,13 @@ const TimelineTaskCard = ({
   const { openPanel } = useTaskDetailStore();
 
   const handleClick = () => {
-    openPanel(task);
+    openPanel(task, {
+      title: task.title,
+      description: '',
+      status: task.status,
+      startDate: task.startDate,
+      endDate: task.endDate
+    });
   };
 
   return (
