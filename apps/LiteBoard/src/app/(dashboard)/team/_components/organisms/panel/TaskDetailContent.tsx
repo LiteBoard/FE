@@ -44,9 +44,9 @@ const TaskDetailContent = ({
         <div className="space-y-[16px]">
           <Assignee assignee={assignee} />
           {/* Schedule with DateRangePicker */}
-          <div className="flex items-center gap-[50px]">
-            <span className="text-text-B3M text-neutral-700">일정</span>
-            <div className="flex items-center gap-3">
+          <div className="flex items-center gap-[78px] flex-nowrap">
+            <span className="text-text-B3M text-neutral-700 flex-shrink-0">일정</span>
+            <div className="flex items-center gap-3 flex-shrink-0">
               <DateRangePicker
                 value={dateRange}
                 onChange={handleDateRangeChange}
