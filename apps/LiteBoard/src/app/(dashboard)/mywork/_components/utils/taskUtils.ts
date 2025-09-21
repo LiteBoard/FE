@@ -42,6 +42,6 @@ export const transformTaskForTodoCard = (task: Task) => {
     status,
     title: task.title,
     todos,
-    taskId: task.taskId,
+    taskId: task.taskId.toString(),
   };
 }; 

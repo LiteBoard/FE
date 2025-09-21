@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { TextField, Checkbox, Button, PlusIcon, HelpIcon } from '@LiteBoard/ui';
 import { ReceivedRequest, WorkRequest } from '../../types/panel';
-import { useCreateRequestCard } from '@/hooks/mutations/requestCard/useCreateRequestCard';
+import { useCreateRequestCard, useDeleteRequestCard } from '@/hooks/mutations/requestCard';
 import { useRequestCardList } from '@/hooks/queries/requestCard/useRequestCardList';
 import { CreateRequestCardRequest } from '@/types/request';
 import { useClickOutside } from '@/hooks/utils/useClickOutSide';
@@ -19,8 +19,10 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
   const [isAddingTodo, setIsAddingTodo] = useState(false);
   const [requestContent, setRequestContent] = useState('');
   const [showMenuForRequestId, setShowMenuForRequestId] = useState<number | null>(null);
+  const [editingRequestId, setEditingRequestId] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const createRequestCardMutation = useCreateRequestCard();
+  const deleteRequestCardMutation = useDeleteRequestCard();
   
   // 업무 요청 목록 조회
   const { data: requestCards, isLoading: isLoadingRequestCards } = useRequestCardList(
@@ -70,9 +72,7 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
 
     try {
       await createRequestCardMutation.mutateAsync({ taskId, requestData });
-      console.log('업무 요청 생성 완료');
       
-      // 폼 초기화
       setRequestContent('');
       setTodos([]);
     } catch (error) {
@@ -85,43 +85,54 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
   };
 
   const handleEditRequest = (requestId: number) => {
-    console.log('편집 요청:', requestId);
+    setEditingRequestId(requestId);
     setShowMenuForRequestId(null);
   };
 
-  const handleDeleteRequest = (requestId: number) => {
-    console.log('삭제 요청:', requestId);
-    setShowMenuForRequestId(null);
+  const handleCancelEdit = () => {
+    setEditingRequestId(null);
+  };
+
+  const handleDeleteRequest = async (requestId: number) => {
+    try {
+      await deleteRequestCardMutation.mutateAsync(requestId);
+    } catch (error) {
+      console.error('업무 요청 삭제 실패:', error);
+    } finally {
+      setShowMenuForRequestId(null);
+    }
   };
 
   return (
-    <div className="space-y-6 px-[10px]">
+    <div className="space-y-6">
       {/* 받은 요청 */}
       <div className="space-y-3">
-        <span className="text-sm text-gray-600">받은 요청</span>
-        <div className="bg-[#f2f4f6] rounded-[20px] h-[166px] w-[328px] p-[16px] flex items-center justify-center">
+        <span className="text-sm font-medium text-neutral-600">받은 요청</span>
+        <div className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-neutral-100">
           {isLoadingRequestCards ? (
-            <div className="text-center">
-              <p className="text-sm text-gray-400">로딩 중...</p>
+            <div className="bg-neutral-100 rounded-[20px] p-4 text-center">
+              <p className="text-sm text-neutral-400">로딩 중...</p>
             </div>
           ) : requestCards && requestCards.length > 0 ? (
-            <div className="w-full h-full overflow-y-auto space-y-3">
-              {requestCards.map((requestCard) => (
-                <ReceivedRequestCard
-                  key={requestCard.id}
-                  requestCard={requestCard}
-                  showMenuForRequestId={showMenuForRequestId}
-                  onDotsClick={handleDotsClick}
-                  onEditRequest={handleEditRequest}
-                  onDeleteRequest={handleDeleteRequest}
-                  menuRef={menuRef}
-                />
-              ))}
-            </div>
+            requestCards.map((requestCard) => (
+              <ReceivedRequestCard
+                key={requestCard.id}
+                requestCard={requestCard}
+                showMenuForRequestId={showMenuForRequestId}
+                onDotsClick={handleDotsClick}
+                onEditRequest={handleEditRequest}
+                onDeleteRequest={handleDeleteRequest}
+                onCancelEdit={handleCancelEdit}
+                menuRef={menuRef}
+                taskId={taskId}
+                isDeletePending={deleteRequestCardMutation.isPending}
+                isEditing={editingRequestId === requestCard.id}
+              />
+            ))
           ) : (
-            <div className="text-center">
-              <HelpIcon width={24} height={24} className="mx-auto mb-2 text-gray-400" />
-              <p className="text-sm text-gray-400">받은 요청이 없습니다.</p>
+            <div className="bg-neutral-100 rounded-[20px] p-4 text-center">
+              <HelpIcon width={24} height={24} className="mx-auto mb-2 text-neutral-400" />
+              <p className="text-sm text-neutral-400">받은 요청이 없습니다.</p>
             </div>
           )}
         </div>
@@ -129,8 +140,8 @@ const RequestForm = ({ workRequest, taskId }: RequestFormProps) => {
 
       {/* 업무 요청 */}
       <div className="space-y-3">
-        <span className="text-sm text-gray-600">업무 요청</span>
-        <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+        <span className="text-sm font-medium text-neutral-600">업무 요청</span>
+        <div className="bg-neutral-100 rounded-[20px] p-4 space-y-3">
           <TextField 
             value={requestContent}
             onChange={(e) => setRequestContent(e.target.value)}

@@ -76,6 +76,7 @@ const CategoryContainer = ({
                   {category.tasks.map((task, index) => (
                     <CategoryTaskCard
                       key={index}
+                      task={task}
                       title={task.title}
                       status={task.status as TaskStatus}
                       members={task.members.length > 0 ? task.members : null}

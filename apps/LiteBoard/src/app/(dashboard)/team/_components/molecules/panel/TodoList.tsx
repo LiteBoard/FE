@@ -1,9 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Progress, Checkbox, Profile, Button, PlusIcon, TextField, TodoActionMenu } from '@LiteBoard/ui';
 import { Progress as ProgressType, TodoItem } from '../../types/panel';
-import { useCreateTodo } from '@/hooks/mutations/todo/useCreateTodo';
-import { useUpdateTodo } from '@/hooks/mutations/todo/useUpdateTodo';
-import { useDeleteTodo } from '@/hooks/mutations/todo/useDeleteTodo';
+import { useCreateTodo, useUpdateTodo, useDeleteTodo } from '@/hooks/mutations/todo';
 import { CreateTodoRequest, UpdateTodoRequest } from '@/types/todo';
 import { useClickOutside } from '@/hooks/utils/useClickOutSide';
 

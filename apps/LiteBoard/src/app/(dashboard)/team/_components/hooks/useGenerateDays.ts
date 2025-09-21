@@ -11,12 +11,14 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 export const useGenerateDays = () => {
   const [startDate, setStartDate] = useState(() => {
     const today = new Date();
-    return subMonths(today, INITIAL_MONTHS_BEFORE);
+    const todayAtNoon = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0, 0);
+    return subMonths(todayAtNoon, INITIAL_MONTHS_BEFORE);
   });
 
   const [endDate, setEndDate] = useState(() => {
     const today = new Date();
-    return addMonths(today, INITIAL_MONTHS_AFTER);
+    const todayAtNoon = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0, 0);
+    return addMonths(todayAtNoon, INITIAL_MONTHS_AFTER);
   });
 
   const scrollTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -29,7 +31,8 @@ export const useGenerateDays = () => {
     let currentDate = new Date(start);
 
     while (currentDate <= end) {
-      days.push(new Date(currentDate));
+      const dayAtNoon = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 12, 0, 0, 0);
+      days.push(dayAtNoon);
       currentDate = addDays(currentDate, 1);
     }
 
@@ -158,7 +161,8 @@ export const useGenerateDays = () => {
   // 오늘 날짜의 초기 스크롤 위치 계산 함수
   const getInitialScrollPosition = useCallback(() => {
     const today = new Date();
-    const todayIndex = differenceInDays(today, startDate);
+    const todayAtNoon = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0, 0, 0);
+    const todayIndex = differenceInDays(todayAtNoon, startDate);
     const todayPosition = todayIndex * DAY_WIDTH_PX;
     const containerWidth = window.innerWidth * 0.7;
     const targetPosition = containerWidth * TODAY_POSITION_RATIO;

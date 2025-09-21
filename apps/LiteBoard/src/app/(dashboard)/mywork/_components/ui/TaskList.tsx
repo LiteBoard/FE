@@ -5,15 +5,77 @@ import { useProjectMyTasks } from "@/hooks";
 import { useProjectContext } from "@/providers/ProjectProvider";
 import { transformTaskForTodoCard } from "../utils/taskUtils";
 import { TaskListReturn } from "../types";
+import { useCallback } from "react";
+import { todoService } from "@/services/todoService";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUserStore } from "@/lib/store/user";
 
 // 태스크 목록 컴포넌트
 export function TaskList(): TaskListReturn {
   const { selectedProjectId } = useProjectContext();
   const { data, isLoading, error } = useProjectMyTasks(selectedProjectId);
+  const queryClient = useQueryClient();
+  const { user } = useUserStore();
+
+  // Todo 체크 상태 변경 핸들러
+  const handleTodoChange = useCallback(async (todoId: string) => {
+    try {
+      await todoService.toggleTodos([parseInt(todoId)]);
+      // 캐시 무효화로 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ['my-tasks', selectedProjectId] });
+    } catch (error) {
+      console.error('Todo 체크 상태 변경 실패:', error);
+    }
+  }, [selectedProjectId, queryClient]);
+
+  // Todo 추가 핸들러
+  const handleTodoAdd = useCallback(async (taskId: string, text: string) => {
+    if (!user?.id) {
+      console.error('사용자 정보가 없습니다.');
+      return;
+    }
+
+    try {
+      await todoService.create(parseInt(taskId), {
+        description: text,
+        memberId: user.id
+      });
+      // 캐시 무효화로 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ['my-tasks', selectedProjectId] });
+    } catch (error) {
+      console.error('Todo 추가 실패:', error);
+      throw error;
+    }
+  }, [selectedProjectId, queryClient, user?.id]);
+
+  // Todo 편집 핸들러
+  const handleTodoEdit = useCallback(async (todoId: string, newText: string) => {
+    try {
+      await todoService.update(parseInt(todoId), {
+        description: newText
+      });
+      // 캐시 무효화로 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ['my-tasks', selectedProjectId] });
+    } catch (error) {
+      console.error('Todo 편집 실패:', error);
+      throw error;
+    }
+  }, [selectedProjectId, queryClient]);
+
+  // Todo 삭제 핸들러
+  const handleTodoDelete = useCallback(async (todoId: string) => {
+    try {
+      await todoService.delete(parseInt(todoId));
+      // 캐시 무효화로 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ['my-tasks', selectedProjectId] });
+    } catch (error) {
+      console.error('Todo 삭제 실패:', error);
+    }
+  }, [selectedProjectId, queryClient]);
 
   if (!selectedProjectId || isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
           <div key={i} className="animate-pulse">
             <div className="w-[388px] h-[300px] bg-gray-200 rounded-2xl"></div>
@@ -43,7 +105,7 @@ export function TaskList(): TaskListReturn {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-3 gap-[24px]">
       {data.tasks.map((task) => {
         const { status, title, todos, taskId } = transformTaskForTodoCard(task);
 
@@ -53,6 +115,11 @@ export function TaskList(): TaskListReturn {
             status={status}
             title={title}
             todos={todos}
+            taskId={taskId}
+            onTodoChange={handleTodoChange}
+            onTodoAdd={(text) => handleTodoAdd(taskId, text)}
+            onTodoEdit={handleTodoEdit}
+            onTodoDelete={handleTodoDelete}
           />
         );
       })}

@@ -39,8 +39,8 @@ export const MyWorkView = ({
   }
 
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="relative px-11 pb-8">
+    <div className="h-full flex flex-col overflow-hidden">
+      <div className="flex-shrink-0 relative px-11 pb-8">
         <DashboardSummary
           total={data.totalTodoCount}
           completed={data.completedTodoCount}
@@ -48,8 +48,10 @@ export const MyWorkView = ({
           userName={data.myInfo.nickname}
         />
         <div className="absolute mt-[36px] h-[12px] bg-neutral-100 -left-11 -right-11"></div>
+      </div>
 
-        {/* 태스크 목록 */}
+      {/* 스크롤 가능한 태스크 목록 영역 */}
+      <div className="flex-1 overflow-y-auto px-11 pb-8">
         <div className="mt-8">
           <TaskList />
         </div>

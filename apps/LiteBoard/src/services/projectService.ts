@@ -6,6 +6,7 @@ import {
   ProjectCreateResponse,
   MyTasksResponse,
 } from '@/types/project';
+import { ProjectMembersResponse } from '@/types/member';
 
 // 프로젝트 서비스 객체
 export const projectService = {
@@ -60,11 +61,26 @@ export const projectService = {
    */
   getMyTasks: async (projectId: number): Promise<MyTasksResponse> => {
     const response = await api.get<ApiResponse<MyTasksResponse>>(`/api/v1/projects/${projectId}/tasks`);
-    
+
     if (!response.data.success) {
       throw new Error(response.data.message || '내 업무 조회에 실패했습니다.');
     }
-    
+
+    return response.data.result;
+  },
+
+  /**
+   * 프로젝트 멤버 조회 API
+   * @param projectId - 프로젝트 ID
+   * @returns 프로젝트 멤버 목록 (권한순으로 정렬)
+   */
+  getMembers: async (projectId: number): Promise<ProjectMembersResponse> => {
+    const response = await api.get<ApiResponse<ProjectMembersResponse>>(`/api/v1/projects/${projectId}/members`);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || '프로젝트 멤버 조회에 실패했습니다.');
+    }
+
     return response.data.result;
   },
 } as const; 

@@ -16,3 +16,4 @@ export * from './Skeleton';
 export * from './TextField';
 export * from './DashboardSummary';
 export * from './TodoActionMenu';
+export * from './DatePicker';

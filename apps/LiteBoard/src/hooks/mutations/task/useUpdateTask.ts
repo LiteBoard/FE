@@ -1,20 +1,27 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { taskService } from '@/services/taskService';
 import { UpdateTaskRequest } from '@/types/task';
+import { CategoryQueryKeys } from '@/constants/query-keys';
+import { useProjectContext } from '@/providers/ProjectProvider';
 
 // 업무 수정 훅
 export const useUpdateTask = () => {
   const queryClient = useQueryClient();
+  const { selectedProjectId } = useProjectContext();
 
   return useMutation({
     mutationFn: ({ taskId, taskData }: { taskId: number; taskData: UpdateTaskRequest }) =>
       taskService.update(taskId, taskData),
-    onSuccess: (updatedTask, { taskId }) => {
-      // 업무 상세 정보 업데이트
-      queryClient.setQueryData(['tasks', 'detail', taskId], updatedTask);
-      
-      // 관련된 모든 업무 목록 무효화 (카테고리별)
+    onSuccess: ( _, { taskId }) => {
+      queryClient.invalidateQueries({ queryKey: ['tasks', 'detail', taskId] });
+
       queryClient.invalidateQueries({ queryKey: ['tasks', 'list'] });
+
+      if (selectedProjectId) {
+        queryClient.invalidateQueries({
+          queryKey: [CategoryQueryKeys.CATEGORY_LIST, selectedProjectId]
+        });
+      }
     },
     onError: (error) => {
       console.error('업무 수정 실패:', error);
