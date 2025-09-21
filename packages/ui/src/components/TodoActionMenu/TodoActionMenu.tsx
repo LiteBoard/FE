@@ -23,7 +23,7 @@ const TodoActionMenu = ({
   return (
     <div 
       ref={menuRef} 
-      className={`absolute right-0 mt-2 w-24 bg-white rounded-lg shadow-lg border border-gray-200 z-10 ${className}`}
+      className={`absolute right-0 mt-2 w-24 bg-white rounded-lg shadow-lg border border-gray-200 z-[50] ${className}`}
     >
       <div className="py-1">
         <button

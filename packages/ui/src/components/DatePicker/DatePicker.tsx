@@ -2,15 +2,13 @@
 
 import * as React from "react"
 import { Button } from "../Button"
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/Popover/Popover"
+} from "../Popover/Popover"
 import { CalendarIcon } from "../Icon"
 import { Calendar } from "../Calender/Calendar"
-
 
 interface DatePickerProps {
   value: Date;
@@ -59,11 +57,11 @@ export function DatePicker({
             <CalendarIcon width={16} height={16} className="text-neutral-500" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent 
-          className="w-auto overflow-hidden p-0"
+        <PopoverContent
+          className="w-auto overflow-hidden p-0 !z-[9999] bg-white"
           align="start"
           side="bottom"
-          sideOffset={4} 
+          sideOffset={4}
           avoidCollisions={true}
         >
           <Calendar

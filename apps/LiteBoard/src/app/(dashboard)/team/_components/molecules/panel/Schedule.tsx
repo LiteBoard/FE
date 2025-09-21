@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, XBoldIcon, CalendarIcon } from '@LiteBoard/ui';
 import { Schedule as ScheduleType } from '../../types/panel';
 

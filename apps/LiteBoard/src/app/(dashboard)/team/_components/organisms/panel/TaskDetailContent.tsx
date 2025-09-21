@@ -1,6 +1,7 @@
-import React from 'react';
-import { Assignee, Schedule, TodoList, RequestForm } from '../../molecules/panel';
+import React, { useState } from 'react';
+import { Assignee, TodoList, RequestForm } from '../../molecules/panel';
 import { TaskDetailData } from '../../types/panel';
+import { DateRangePicker, Button, XBoldIcon, CalendarIcon, type DateRange } from '@LiteBoard/ui';
 
 interface TaskDetailContentProps {
   assignee: TaskDetailData['assignee'];
@@ -15,7 +16,6 @@ interface TaskDetailContentProps {
 
 const TaskDetailContent = ({
   assignee,
-  schedule,
   progress,
   todos,
   receivedRequests,
@@ -23,13 +23,50 @@ const TaskDetailContent = ({
   taskId,
   onTodoChanges,
 }: TaskDetailContentProps) => {
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: undefined
+  });
+
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    setDateRange(range);
+    console.log('선택된 기간:', range);
+  };
+
+  const handleClearDate = () => {
+    setDateRange(undefined);
+  };
+
   return (
     <div className="flex h-full">
       {/* Left Column */}
       <div className="flex-1 p-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-neutral-100">
         <div className="space-y-[16px]">
           <Assignee assignee={assignee} />
-          <Schedule schedule={schedule} />
+          {/* Schedule with DateRangePicker */}
+          <div className="flex items-center gap-[50px]">
+            <span className="text-text-B3M text-neutral-700">일정</span>
+            <div className="flex items-center gap-3">
+              <DateRangePicker
+                value={dateRange}
+                onChange={handleDateRangeChange}
+                placeholder="기간을 선택하세요"
+                renderTrigger={(value, formatRange, open, setOpen) => (
+                  <div className="flex items-center gap-3 cursor-pointer" onClick={() => setOpen(!open)}>
+                    <div className="w-[38px] h-[38px] bg-white border border-gray-300 rounded-full flex items-center justify-center">
+                      <CalendarIcon width={20} height={20} />
+                    </div>
+                    <span className="text-base font-medium text-gray-900 hover:text-blue-500 transition-colors">
+                      {formatRange()}
+                    </span>
+                  </div>
+                )}
+              />
+              <Button variant="borderless" size="md" onClick={handleClearDate}>
+                <XBoldIcon width={16} height={16} />
+              </Button>
+            </div>
+          </div>
           <TodoList 
             progress={progress}
             todos={todos}
